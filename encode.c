@@ -34,10 +34,10 @@ int main(int argc, char * argv[]) {
     }
 
     int width, height, channels;
-    int num_channels = 4;
+    unsigned char num_channels = 4;
     
     // Load the PNG image
-    char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
+    unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
     if (img == NULL) {
         printf("Error: Failed to load image\n");
         return EXIT_FAILURE;
@@ -68,9 +68,13 @@ int main(int argc, char * argv[]) {
 
     printf("Encoding characters into image ...\n");
 
+    // stores the length of the message as the first pixel
+    for (int i = 0; i < 4; i++) {
+        img[3 - i] = message_length >> 8 * i;
+    }
 
     //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
-    for (int i = 0; i < message_length; i++) {
+    for (int i = 8; i < message_length; i++) {
         unsigned char img_r_byte = img[4 * i + 0] & 0b11111100;
         unsigned char img_g_byte = img[4 * i + 1] & 0b11111100;
         unsigned char img_b_byte = img[4 * i + 2] & 0b11111100;
@@ -97,9 +101,9 @@ int main(int argc, char * argv[]) {
     // debugging
     for (int i = 0; i < total_pixels; i++) {
         if (i%4==0) {
-            //puts("");
+            puts("");
         }
-        //printf("%hhu ", img[i]);
+        printf("%hhu ", img[i]);
     }
 
     // Write the modified image back to a PNG file

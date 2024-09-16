@@ -28,7 +28,7 @@ int main(int argc, char * argv[]) {
         // also makes sure it is a 1 or 2 and not anything else
         compression_lvl = atoi(argv[4]);
         if (compression_lvl != 1 && compression_lvl != 2) {
-            printf("Incorrect command format. Refer to README.md for uasage\n");
+            printf("Error: Incorrect command format. Refer to README.md for uasage\n");
             return EXIT_FAILURE; 
         }
     }
@@ -37,39 +37,74 @@ int main(int argc, char * argv[]) {
     int num_channels = 4;
     
     // Load the PNG image
-    unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
+    char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
     if (img == NULL) {
-        printf("Failed to load image\n");
+        printf("Error: Failed to load image\n");
         return EXIT_FAILURE;
     }
+    unsigned int total_pixels = width * height;
 
-    printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, width * height);
-    unsigned int total_bytes = width * height * compression_lvl;
-    printf("(That means we can encode %d Kb of ascii characters in it!)\n\n", width * height * compression_lvl / 1024);
+    printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, total_pixels);
+    
+    printf("(That means we can encode %d ascii characters in it!)\n\n", total_pixels * compression_lvl);
 
-    printf("Reading %s for message. . .\n",mesasage_txt_name);
+    printf("Reading %s for message. . .\n", mesasage_txt_name);
 
     FILE *fptr;
 
     // Open a file in read mode
     fptr = fopen(mesasage_txt_name, "r"); 
 
-    char message[total_bytes + 1];
-    fread(message, 1, total_bytes, fptr);
-    message[total_bytes] = '\0';
+    char message[total_pixels];
+    fread(message, 1, total_pixels, fptr);
+    message[total_pixels - 1] = '\0';
 
     // Close the file
     fclose(fptr); 
 
-    printf("%s", message);
+    unsigned int message_length = strlen(message);
 
-    for (unsigned int i = 0; i < width * height * num_channels; i++) {
-        img[i] = img[i] & 0b11110000;
+    printf("Encoding %d characters\n\n", message_length);
+
+    printf("Encoding characters into image ...\n");
+
+
+    //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
+    for (int i = 0; i < message_length; i++) {
+        unsigned char img_r_byte = img[4 * i + 0] & 0b11111100;
+        unsigned char img_g_byte = img[4 * i + 1] & 0b11111100;
+        unsigned char img_b_byte = img[4 * i + 2] & 0b11111100;
+        unsigned char img_a_byte = img[4 * i + 3] & 0b11111100;
+
+        unsigned char message_byte = message[i];
+
+        unsigned char message_r_bits = (message_byte & 0b11000000) >> 6;
+        unsigned char message_g_bits = (message_byte & 0b00110000) >> 4;
+        unsigned char message_b_bits = (message_byte & 0b00001100) >> 2;
+        unsigned char message_a_bits = (message_byte & 0b00000011) >> 0;
+
+        img_r_byte |= message_r_bits;
+        img_g_byte |= message_g_bits;
+        img_b_byte |= message_b_bits;
+        img_a_byte |= message_a_bits;
+
+        img[4 * i + 0] = img_r_byte;
+        img[4 * i + 1] = img_g_byte;
+        img[4 * i + 2] = img_b_byte;
+        img[4 * i + 3] = img_a_byte;        
+    }
+
+    // debugging
+    for (int i = 0; i < total_pixels; i++) {
+        if (i%4==0) {
+            //puts("");
+        }
+        //printf("%hhu ", img[i]);
     }
 
     // Write the modified image back to a PNG file
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
-        printf("Failed to save image\n");
+        printf("Error: Failed to save image\n");
         return 1;
     }
 

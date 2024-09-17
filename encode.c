@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
     char* mesasage_txt_name = argv[3];
     
     // sets the default compression level to 1 bpp
-    unsigned int compression_lvl = 1;
+    unsigned char compression_lvl = 1;
     if (argc == 5) {
         // changes the compression level to 1 or 2 depending on the arg
         // also makes sure it is a 1 or 2 and not anything else
@@ -56,25 +56,24 @@ int main(int argc, char * argv[]) {
     fptr = fopen(mesasage_txt_name, "r"); 
 
     char message[total_pixels];
+    
     fread(message, 1, total_pixels, fptr);
-    message[total_pixels - 1] = '\0';
 
     // Close the file
     fclose(fptr); 
 
     unsigned int message_length = strlen(message);
 
+    // terminates with null char
+    message[message_length - 2] = '\0';
+    message[message_length - 1] = compression_lvl;
+
     printf("Encoding %d characters\n\n", message_length);
 
     printf("Encoding characters into image ...\n");
 
-    // stores the length of the message as the first pixel
-    for (int i = 0; i < 4; i++) {
-        img[3 - i] = message_length >> 8 * i;
-    }
-
     //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
-    for (int i = 8; i < message_length; i++) {
+    for (int i = 0; i < message_length; i++) {
         unsigned char img_r_byte = img[4 * i + 0] & 0b11111100;
         unsigned char img_g_byte = img[4 * i + 1] & 0b11111100;
         unsigned char img_b_byte = img[4 * i + 2] & 0b11111100;
@@ -96,6 +95,13 @@ int main(int argc, char * argv[]) {
         img[4 * i + 1] = img_g_byte;
         img[4 * i + 2] = img_b_byte;
         img[4 * i + 3] = img_a_byte;        
+        
+        if (message_byte == '\0') {
+            img[4 * i + 0] = 0;
+            img[4 * i + 1] = 0;
+            img[4 * i + 2] = 0;
+            img[4 * i + 3] = 0;    
+        }
     }
 
     // debugging

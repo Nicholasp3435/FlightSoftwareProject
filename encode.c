@@ -43,12 +43,15 @@ int main(int argc, char * argv[]) {
         return EXIT_FAILURE;
     }
     unsigned int total_pixels = width * height;
+    unsigned int total_sub_pixels = total_pixels * num_channels;
 
     printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, total_pixels);
     
     printf("(That means we can encode %d ascii characters in it!)\n\n", total_pixels * compression_lvl);
 
     printf("Reading %s for message. . .\n", mesasage_txt_name);
+
+    
 
     FILE *fptr;
 
@@ -64,16 +67,22 @@ int main(int argc, char * argv[]) {
 
     unsigned int message_length = strlen(message);
 
-    // terminates with null char
-    message[message_length - 2] = '\0';
-    message[message_length - 1] = compression_lvl;
+    if (message_length > total_pixels) {
+        printf("Warning: too big message or too smol image. Truncating message.\n");
+        message_length = total_pixels;
+    }
+
+    // terminates with null char    
+    message[message_length - 1] = '\0';
 
     printf("Encoding %d characters\n\n", message_length);
+
+
 
     printf("Encoding characters into image ...\n");
 
     //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
-    for (int i = 0; i < message_length; i++) {
+    for (int i = 0; i < total_pixels; i++) {
         unsigned char img_r_byte = img[4 * i + 0] & 0b11111100;
         unsigned char img_g_byte = img[4 * i + 1] & 0b11111100;
         unsigned char img_b_byte = img[4 * i + 2] & 0b11111100;
@@ -94,18 +103,11 @@ int main(int argc, char * argv[]) {
         img[4 * i + 0] = img_r_byte;
         img[4 * i + 1] = img_g_byte;
         img[4 * i + 2] = img_b_byte;
-        img[4 * i + 3] = img_a_byte;        
-        
-        if (message_byte == '\0') {
-            img[4 * i + 0] = 0;
-            img[4 * i + 1] = 0;
-            img[4 * i + 2] = 0;
-            img[4 * i + 3] = 0;    
-        }
+        img[4 * i + 3] = img_a_byte;      
     }
 
     // debugging
-    for (int i = 0; i < total_pixels; i++) {
+    for (int i = 0; i < total_sub_pixels; i++) {
         if (i%4==0) {
             puts("");
         }

@@ -61,6 +61,12 @@ void encode_image(unsigned int message_size, unsigned char compression_lvl, unsi
     }
 }
 
+void add_meta(char* message, unsigned char meta_bytes) {
+    for (unsigned char i = 0; i < meta_bytes; i++) {
+        message[i] = '\0';
+    }
+}
+
 void print_image(unsigned char* img, unsigned int total_sub_pixels) {
     printf("All image pixels (decimal):");
     for (unsigned int i = 0; i < total_sub_pixels; i++) {
@@ -122,7 +128,11 @@ int main(int argc, char * argv[]) {
     unsigned int message_size = ftell(fptr);
     fseek(fptr, 0L, SEEK_SET);
 
-    // checks if message_size is too much for image encoding
+    unsigned char meta_bytes = 5;
+
+    message_size = message_size - meta_bytes;
+
+        // checks if message_size is too much for image encoding
     if (message_size > (total_pixels * compression_lvl)) {
         printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
         if (compression_lvl == 1) {
@@ -131,19 +141,16 @@ int main(int argc, char * argv[]) {
         message_size = total_pixels * compression_lvl;
     }
 
-    char message[message_size];
+    char message[message_size + meta_bytes];
 
-    unsigned char meta_bytes = 5;
+    add_meta(message, meta_bytes);
     
     fread((message + meta_bytes), 1, message_size, fptr);
 
-    message_size = meta_bytes + message_size;
+    message[message_size - 1] = '\0';
 
     // Close the file
     fclose(fptr); 
-
-    // terminates with null char    
-    message[message_size - 1] = '\0';
 
     printf("Encoding %d characters\n\n", message_size);
 

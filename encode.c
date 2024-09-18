@@ -8,9 +8,35 @@
 #include "include/stb_image.h"
 #include "include/stb_image_write.h"
 
-int main(int argc, char * argv[]) {
-    // checks the command line arguments to make sure everything is formatted properly
+unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char compression_lvl) {
+    printf("encoding %c into %x\n", letter, pixel_bytes);
 
+    unsigned int encoded_pixel = 0;
+
+    unsigned int bit_mask = 0xFCFCFCFC;
+    if (compression_lvl == 2) {
+        bit_mask = 0xF0F0F0F0;
+    }
+    // bit masks for each channel
+    pixel_bytes &= bit_mask;
+
+    unsigned char letter_mask = 0b11000000;
+    unsigned int split_letter = 0;
+
+    // splits the letter into 4
+    for (int i = 3; i >= 0; i--) {
+        unsigned int current_channel = letter_mask & letter;
+        current_channel = current_channel << (6 * i);
+        split_letter |= current_channel;
+        letter_mask >>= 2;
+    }
+
+    encoded_pixel = pixel_bytes | split_letter;
+    printf("%x \n", encoded_pixel);
+    return encoded_pixel;
+}
+
+int main(int argc, char * argv[]) {
     // makes sure there isn't too many or too little args
     if (argc < 4 || argc > 5) {
         printf("Incorrect command format. Refer to README.md for uasage\n");
@@ -51,59 +77,55 @@ int main(int argc, char * argv[]) {
 
     printf("Reading %s for message. . .\n", mesasage_txt_name);
 
-    
-
     FILE *fptr;
 
-    // Open a file in read mode
+    // Open the message file in read mode
     fptr = fopen(mesasage_txt_name, "r"); 
 
-    char message[total_pixels];
+    // get's the length of the message
+    fseek(fptr, 0L, SEEK_END);
+    unsigned int message_size = ftell(fptr);
+    fseek(fptr, 0L, SEEK_SET);
+
+    // checks if message_size is too much for image encoding
+    if (message_size > (total_pixels * compression_lvl)) {
+        printf("Warning: too big message or too smol image. Truncating message.\n");
+        message_size = total_pixels * compression_lvl;
+    }
+
+    char message[message_size];
     
-    fread(message, 1, total_pixels, fptr);
+    fread(message, 1, message_size, fptr);
 
     // Close the file
     fclose(fptr); 
 
-    unsigned int message_length = strlen(message);
 
-    if (message_length > total_pixels) {
-        printf("Warning: too big message or too smol image. Truncating message.\n");
-        message_length = total_pixels;
-    }
 
     // terminates with null char    
-    message[message_length - 1] = '\0';
+    message[message_size - 1] = '\0';
 
-    printf("Encoding %d characters\n\n", message_length);
-
-
+    printf("Encoding %d characters\n\n", message_size);
 
     printf("Encoding characters into image ...\n");
 
     //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
-    for (int i = 0; i < total_pixels; i++) {
-        unsigned char img_r_byte = img[4 * i + 0] & 0b11111100;
-        unsigned char img_g_byte = img[4 * i + 1] & 0b11111100;
-        unsigned char img_b_byte = img[4 * i + 2] & 0b11111100;
-        unsigned char img_a_byte = img[4 * i + 3] & 0b11111100;
+    for (int i = 0; i < message_size; i++) {
+        unsigned int pixel_bytes = 0;
 
-        unsigned char message_byte = message[i];
+        // puts the channels of the pixels into an int for encoding
+        for (int j = 0; j < 4; j++) {
+            unsigned int channel_byte = img[4 * i + j];
+            channel_byte <<= (3 - j) * 8;
+            pixel_bytes |= channel_byte;
+        }    
 
-        unsigned char message_r_bits = (message_byte & 0b11000000) >> 6;
-        unsigned char message_g_bits = (message_byte & 0b00110000) >> 4;
-        unsigned char message_b_bits = (message_byte & 0b00001100) >> 2;
-        unsigned char message_a_bits = (message_byte & 0b00000011) >> 0;
+        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], compression_lvl);
 
-        img_r_byte |= message_r_bits;
-        img_g_byte |= message_g_bits;
-        img_b_byte |= message_b_bits;
-        img_a_byte |= message_a_bits;
-
-        img[4 * i + 0] = img_r_byte;
-        img[4 * i + 1] = img_g_byte;
-        img[4 * i + 2] = img_b_byte;
-        img[4 * i + 3] = img_a_byte;      
+        // places the encoded pixel in the image
+        for (int j = 0; j < 4; j++) {
+            img[4 * i + j] = (encoded_pixel >> (3-j)*8);
+        }
     }
 
     // debugging

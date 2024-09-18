@@ -6,6 +6,744 @@ Warning: too big message or too smol image. Truncating message.
 Encoding 360 characters
 
 Encoding characters into image ...
+encoding S into 62564eff
+61554cff 
+encoding c into 5b4e46ff
+594e44ff 
+encoding r into 5a5248ff
+595348fe 
+encoding i into 5a594cff
+595a4efd 
+encoding p into 5a5247ff
+595344fc 
+encoding t into 575042ff
+555341fc 
+encoding s into 544b40ff
+554b40ff 
+encoding . into 574e47ff
+544e47fe 
+encoding c into 564e47ff
+554e44ff 
+encoding o into 544941ff
+554a43ff 
+encoding m into 53473fff
+51463ffd 
+encoding 
+ into 50453cff
+50443efe 
+encoding B into 4d433bff
+4d4038fe 
+encoding e into 50453eff
+51463dfd 
+encoding e into 4f423bff
+4d4239fd 
+encoding   into 4e4138ff
+4c4238fc 
+encoding M into 4b4139ff
+49403bfd 
+encoding o into 4c443fff
+4d463fff 
+encoding v into 453e36ff
+453f35fe 
+encoding i into 433b32ff
+413a32fd 
+encoding e into 443c34ff
+453e35fd 
+encoding 
+ into 494238ff
+48403afe 
+encoding B into 50483eff
+51483cfe 
+encoding y into 4f4840ff
+4d4b42fd 
+encoding   into 60554eff
+60564cfc 
+encoding J into 5a4d45ff
+594c46fe 
+encoding e into 5a4d43ff
+594e41fd 
+encoding r into 5d5549ff
+5d5748fe 
+encoding r into 564f48ff
+554f48fe 
+encoding y into 4c423cff
+4d433efd 
+encoding   into 6d6968ff
+6c6a68fc 
+encoding S into 7c797aff
+7d7978ff 
+encoding e into 78787cff
+797a7dfd 
+encoding i into 787677ff
+797676fd 
+encoding n into 7f7e81ff
+7d7e83fe 
+encoding f into 858a91ff
+858a91fe 
+encoding e into 89929bff
+899299fd 
+encoding l into 8b949eff
+89969ffc 
+encoding d into 8a919aff
+899299fc 
+encoding 
+ into 84888eff
+84888efe 
+encoding 
+ into 6a696bff
+68686afe 
+encoding N into 636061ff
+616063fe 
+encoding A into 534b45ff
+514844fd 
+encoding R into 514841ff
+514940fe 
+encoding R into 534b45ff
+514944fe 
+encoding A into 514942ff
+514840fd 
+encoding T into 453d33ff
+453d31fc 
+encoding O into 403a2fff
+41382fff 
+encoding R into 5a4f48ff
+594d48fe 
+encoding : into 594d45ff
+584f46fe 
+encoding 
+ into 594c42ff
+584c42fe 
+encoding ( into 5b5047ff
+585246fc 
+encoding B into 413d3dff
+413c3cfe 
+encoding l into 261e22ff
+251e23fc 
+encoding a into 4b4646ff
+494644fd 
+encoding c into c3bdb8ff
+c1beb8ff 
+encoding k into 938b88ff
+918a8aff 
+encoding   into aea49dff
+aca69cfc 
+encoding s into bfb9b3ff
+bdbbb0ff 
+encoding c into 78787aff
+797a78ff 
+encoding r into 363435ff
+353734fe 
+encoding e into 8c96a1ff
+8d96a1fd 
+encoding e into 949facff
+959eadfd 
+encoding n into 9299a5ff
+919aa7fe 
+encoding   into 8f96a2ff
+8c96a0fc 
+encoding w into 9ba2afff
+99a3adff 
+encoding i into 8b9099ff
+89929afd 
+encoding t into 686667ff
+696765fc 
+encoding h into 47413aff
+45423afc 
+encoding   into 463e36ff
+443e34fc 
+encoding t into 3f382fff
+3d3b2dfc 
+encoding e into 3f382eff
+3d3a2dfd 
+encoding x into 584e46ff
+594f46fc 
+encoding t into 554c44ff
+554f45fc 
+encoding ; into 564c44ff
+544f46ff 
+encoding   into 554b42ff
+544a40fc 
+encoding T into 544e4aff
+554d49fc 
+encoding h into 595a60ff
+595a62fc 
+encoding e into b7b2acff
+b5b2adfd 
+encoding   into cdc7bdff
+ccc6bcfc 
+encoding s into 9b9289ff
+999388ff 
+encoding o into d3cabdff
+d1cabfff 
+encoding u into c5c1b8ff
+c5c3b9fd 
+encoding n into 251d1eff
+251e1ffe 
+encoding d into 2f2c2fff
+2d2e2dfc 
+encoding   into 878e96ff
+848e94fc 
+encoding o into 8c9097ff
+8d9297ff 
+encoding f into 838d98ff
+818e99fe 
+encoding   into 89919cff
+88929cfc 
+encoding b into 9aa0abff
+99a2a8fe 
+encoding u into adb3bfff
+adb3bdfd 
+encoding z into 8e929cff
+8d939efe 
+encoding z into 5b5a5aff
+595b5afe 
+encoding i into 3f3930ff
+3d3a32fd 
+encoding n into 443f34ff
+453e37fe 
+encoding g into 494339ff
+494239ff 
+encoding   into 564d45ff
+544e44fc 
+encoding b into 564d46ff
+554e44fe 
+encoding e into 544d46ff
+554e45fd 
+encoding e into 524941ff
+514a41fd 
+encoding s into 8c8f92ff
+8d8f90ff 
+encoding   into b1b4b3ff
+b0b6b0fc 
+encoding c into 948a83ff
+958a80ff 
+encoding a into aaa5a2ff
+a9a6a0fd 
+encoding n into d4cecaff
+d5cecbfe 
+encoding   into b4aba0ff
+b4aaa0fc 
+encoding b into beb1a4ff
+bdb2a4fe 
+encoding e into 8c8b89ff
+8d8a89fd 
+encoding   into 8f9399ff
+8c9298fc 
+encoding h into 868c94ff
+858e96fc 
+encoding e into 9a9ca0ff
+999ea1fd 
+encoding a into 7e8287ff
+7d8284fd 
+encoding r into 89909aff
+899398fe 
+encoding d into 9b9ea5ff
+999ea5fc 
+encoding ) into a1a2a8ff
+a0a2aafd 
+encoding 
+ into a7a8b1ff
+a4a8b2fe 
+encoding A into 979ca9ff
+959ca8fd 
+encoding c into 606365ff
+616264ff 
+encoding c into 443f37ff
+453e34ff 
+encoding o into 514a43ff
+514a43ff 
+encoding r into 524941ff
+514b40fe 
+encoding d into 574c43ff
+554e41fc 
+encoding i into 574e44ff
+554e46fd 
+encoding n into 595047ff
+595247fe 
+encoding g into a1a6aaff
+a1a6a9ff 
+encoding   into b0b4b7ff
+b0b6b4fc 
+encoding t into 9ea0a4ff
+9da3a5fc 
+encoding o into d9d1d2ff
+d9d2d3ff 
+encoding   into f6eff1ff
+f4eef0fc 
+encoding a into 7f797bff
+7d7a78fd 
+encoding l into b0a69eff
+b1a69ffc 
+encoding l into c9c8c2ff
+c9cac3fc 
+encoding   into aaabacff
+a8aaacfc 
+encoding k into 797c81ff
+797e82ff 
+encoding n into 93979cff
+91969ffe 
+encoding o into 8c8d92ff
+8d8e93ff 
+encoding w into 8a8e96ff
+898f95ff 
+encoding n into 93969dff
+91969ffe 
+encoding   into a1a0a6ff
+a0a2a4fc 
+encoding l into aaaab1ff
+a9aab3fc 
+encoding a into a5a6afff
+a5a6acfd 
+encoding w into 99a0adff
+99a3adff 
+encoding s into 5e5b5bff
+5d5b58ff 
+encoding 
+ into 4a4239ff
+48403afe 
+encoding o into 4c4239ff
+4d423bff 
+encoding f into 52473eff
+51463dfe 
+encoding   into 534a41ff
+504a40fc 
+encoding a into 524c42ff
+514e40fd 
+encoding v into 969b9fff
+959b9dfe 
+encoding i into 949899ff
+959a9afd 
+encoding a into b0b5bbff
+b1b6b8fd 
+encoding t into b07878ff
+b17b79fc 
+encoding i into cba09fff
+c9a29efd 
+encoding o into dcdee2ff
+dddee3ff 
+encoding n into ced1d1ff
+cdd2d3fe 
+encoding , into c4c6c4ff
+c4c6c7fc 
+encoding 
+ into 9c9d9eff
+9c9c9efe 
+encoding   into 727477ff
+707674fc 
+encoding : into 8b8e94ff
+888f96fe 
+encoding 
+ into 8d8e92ff
+8c8c92fe 
+encoding t into 868990ff
+858b91fc 
+encoding h into 87878aff
+85868afc 
+encoding e into 9d9ca1ff
+9d9ea1fd 
+encoding r into a8a5a8ff
+a9a7a8fe 
+encoding e into a1a0a6ff
+a1a2a5fd 
+encoding   into a3a7b4ff
+a0a6b4fc 
+encoding i into 97a0aeff
+95a2aefd 
+encoding s into 484440ff
+494740ff 
+encoding   into 4a4238ff
+484238fc 
+encoding n into 4b433bff
+49423bfe 
+encoding o into 4d4840ff
+4d4a43ff 
+encoding   into 514c43ff
+504e40fc 
+encoding w into 78797bff
+797b79ff 
+encoding a into 71706cff
+71726cfd 
+encoding y into 6e6a66ff
+6d6b66fd 
+encoding   into 493227ff
+483224fc 
+encoding a into 675148ff
+655248fd 
+encoding   into 999693ff
+989690fc 
+encoding b into a1a19eff
+a1a29cfe 
+encoding e into 94928dff
+95928dfd 
+encoding e into 797670ff
+797671fd 
+encoding 
+ into 6a6b6dff
+68686efe 
+encoding s into 818487ff
+818784ff 
+encoding h into 8e8c8cff
+8d8e8efc 
+encoding o into 89898bff
+898a8bff 
+encoding u into 7d7c7eff
+7d7f7dfd 
+encoding l into 999897ff
+999a97fc 
+encoding d into a8a5a3ff
+a9a6a1fc 
+encoding   into 9b9494ff
+989694fc 
+encoding b into 9b979dff
+99969cfe 
+encoding e into a0a6b3ff
+a1a6b1fd 
+encoding   into 64686bff
+646a68fc 
+encoding a into 4d463eff
+4d463cfd 
+encoding b into 4b453eff
+49463cfe 
+encoding l into 564a3fff
+554a3ffc 
+encoding e into 58493cff
+594a3dfd 
+encoding   into 695d55ff
+685e54fc 
+encoding t into 675749ff
+655749fc 
+encoding o into 473d2eff
+453e2fff 
+encoding   into 4e3f2eff
+4c3e2cfc 
+encoding f into 584938ff
+594a39fe 
+encoding l into 665c52ff
+655e53fc 
+encoding y into 665d53ff
+655f52fd 
+encoding . into 6c645bff
+6c665bfe 
+encoding 
+ into 6e6a63ff
+6c6862fe 
+encoding   into 525453ff
+505650fc 
+encoding : into 787879ff
+787b7afe 
+encoding 
+ into 7f7e80ff
+7c7c82fe 
+encoding I into 868586ff
+858486fd 
+encoding t into 757474ff
+757775fc 
+encoding s into 938f8aff
+918f88ff 
+encoding   into 9d9993ff
+9c9a90fc 
+encoding w into 918a87ff
+918b85ff 
+encoding i into 9e999aff
+9d9a9afd 
+encoding n into 97959bff
+95969bfe 
+encoding g into 848c97ff
+858e95ff 
+encoding s into 4a443dff
+49473cff 
+encoding   into 494037ff
+484234fc 
+encoding a into 453429ff
+453628fd 
+encoding r into 2e221cff
+2d231cfe 
+encoding e into 372921ff
+352a21fd 
+encoding   into 42342aff
+403628fc 
+encoding t into 403628ff
+413729fc 
+encoding o into 382d1eff
+392e1fff 
+encoding o into 403222ff
+413223ff 
+encoding   into 382b1bff
+382a18fc 
+encoding s into 4d4233ff
+4d4330ff 
+encoding m into 5d5548ff
+5d564bfd 
+encoding a into 575148ff
+555248fd 
+encoding l into 413e3aff
+413e3bfc 
+encoding l into 5c5958ff
+5d5a5bfc 
+encoding   into 6a686aff
+686a68fc 
+encoding t into 757271ff
+757371fc 
+encoding o into 6a6765ff
+696667ff 
+encoding   into 8b8681ff
+888680fc 
+encoding g into 918a83ff
+918a81ff 
+encoding e into 8c8580ff
+8d8681fd 
+encoding t into 969191ff
+959391fc 
+encoding 
+ into 8d898cff
+8c888efe 
+encoding i into 8f96a2ff
+8d96a2fd 
+encoding t into 695649ff
+695749fc 
+encoding s into 614c3eff
+614f3cff 
+encoding   into 593f2eff
+583e2cfc 
+encoding f into 251b16ff
+251a15fe 
+encoding a into 372821ff
+352a20fd 
+encoding t into 413327ff
+413325fc 
+encoding   into 5e493bff
+5c4a38fc 
+encoding l into 3a2f23ff
+392e23fc 
+encoding i into 3f3323ff
+3d3222fd 
+encoding t into 362a1dff
+352b1dfc 
+encoding t into 463c2eff
+453f2dfc 
+encoding l into 50473aff
+51463bfc 
+encoding e into 484138ff
+494239fd 
+encoding   into 3e3833ff
+3c3a30fc 
+encoding b into 3d3b3bff
+3d3a38fe 
+encoding o into 59595cff
+595a5fff 
+encoding d into 706c6cff
+716e6dfc 
+encoding y into 615f5dff
+615f5efd 
+encoding   into 78716dff
+78726cfc 
+encoding o into 7a726bff
+79726bff 
+encoding f into 7e7771ff
+7d7671fe 
+encoding f into 857f7eff
+857e7dfe 
+encoding   into 817e80ff
+807e80fc 
+encoding t into 868c97ff
+858f95fc 
+encoding h into 392b23ff
+392a22fc 
+encoding e into 654e3fff
+654e3dfd 
+encoding   into 3f291dff
+3c2a1cfc 
+encoding g into 3c2c23ff
+3d2e21ff 
+encoding r into 5c4940ff
+5d4b40fe 
+encoding o into 5b4940ff
+594a43ff 
+encoding u into 685144ff
+695345fd 
+encoding n into 5a4638ff
+59463bfe 
+encoding d into 2f261cff
+2d261dfc 
+encoding . into 281f18ff
+281e1bfe 
+encoding 
+ into 332b24ff
+302826fe 
+encoding   into 302822ff
+302a20fc 
+encoding : into 302b27ff
+302b26fe 
+encoding 
+ into 252526ff
+242426fe 
+encoding T into 313336ff
+313135fc 
+encoding h into 525051ff
+515252fc 
+encoding e into 626061ff
+616261fd 
+encoding   into 545251ff
+545250fc 
+encoding b into 5a5654ff
+595654fe 
+encoding e into 625b55ff
+615a55fd 
+encoding e into 6b645fff
+69665dfd 
+encoding , into 635d59ff
+605e5bfc 
+encoding   into 74747aff
+747678fc 
+encoding o into 818792ff
+818693ff 
+encoding f into 2a231cff
+29221dfe 
+encoding   into 4e3d33ff
+4c3e30fc 
+encoding c into 776151ff
+756250ff 
+encoding o into 766356ff
+756257ff 
+encoding u into 776457ff
+756755fd 
+encoding r into 81685aff
+816b58fe 
+encoding s into 987b6bff
+997b68ff 
+encoding e into 806251ff
+816251fd 
+encoding , into 2c241eff
+2c261ffc 
+encoding   into 17120fff
+14120cfc 
+encoding f into 231d19ff
+211e19fe 
+encoding l into 292320ff
+292223fc 
+encoding i into 1f1e1eff
+1d1e1efd 
+encoding e into 1b1d21ff
+191e21fd 
+encoding s into 282727ff
+292724ff 
+encoding   into 544d4aff
+544e48fc 
+encoding a into 545254ff
+555254fd 
+encoding n into 393836ff
+393a37fe 
+encoding y into 46423eff
+45433efd 
+encoding w into 58524dff
+59534dff 
+encoding a into 4f4b48ff
+4d4a48fd 
+encoding y into 474648ff
+45474afd 
+encoding 
+ into 666a72ff
+646872fe 
+encoding   into 808793ff
+808690fc 
+encoding : into 433b33ff
+403b32fe 
+encoding 
+ into 66584eff
+64584efe 
+encoding b into 625145ff
+615244fe 
+encoding e into 736158ff
+716259fd 
+encoding c into 53453dff
+51463cff 
+encoding a into 685347ff
+695244fd 
+encoding u into 836757ff
+816755fd 
+encoding s into 947464ff
+957764ff 
+encoding e into 735a4cff
+715a4dfd 
+encoding   into 241f1dff
+241e1cfc 
+encoding b into 131212ff
+111210fe 
+encoding e into 101113ff
+111211fd 
+encoding e into 111417ff
+111615fd 
+encoding s into 121316ff
+111314ff 
+encoding   into 302d2cff
+302e2cfc 
+encoding d into 4b4441ff
+494641fc 
+encoding o into 303133ff
+313233ff 
+encoding n into 242323ff
+252223fe 
+encoding ' into 2a2927ff
+282a25ff 
+encoding t into 343333ff
+353331fc 
+encoding   into 2c2c2dff
+2c2e2cfc 
+encoding c into 484c51ff
+494e50ff 
+encoding a into 6b727cff
+69727cfd 
+encoding r into 717479ff
+717778fe 
+encoding e into 2f271fff
+2d261dfd 
+encoding 
+ into 473b31ff
+443832fe 
+encoding w into 705e53ff
+715f51ff 
+encoding h into 776359ff
+75625afc 
+encoding a into 755e54ff
+755e54fd 
+encoding t into 876e63ff
+856f61fc 
+encoding   into 896e61ff
+886e60fc 
+encoding h into 80665bff
+81665afc 
+encoding u into 8d6d5cff
+8d6f5dfd 
+encoding m into 846655ff
+856657fd 
+encoding a into 211b18ff
+211a18fd 
+encoding n into 7080aff
+50a0bfe 
+encoding s into 40508ff
+50708ff 
+encoding   into f0e0eff
+c0e0cfc 
+encoding t into 241e1cff
+251f1dfc 
+encoding h into 31302fff
+31322efc 
+encoding i into 161516ff
+151616fd 
+encoding n into 121213ff
+111213fe 
+encoding k into 131518ff
+11161aff 
+encoding   into 16181cff
+141a1cfc 
+encoding i into 24282eff
+252a2efd 
+encoding s into 40454bff
+414748ff 
+encoding   into 6e737cff
+6c727cfc 
+encoding   into 6a5c54ff
+685c54fc 
 
 97 85 76 255 
 89 78 68 255 

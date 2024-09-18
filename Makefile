@@ -6,10 +6,10 @@ all: encode.out decode.out
 # hey btw future me: -lm means Link Math (L M!) and the stb libs needs it
 
 encode.out: encode.c
-	$(CC) $(CFLAGS) -o encode.out encode.c -lm
+	$(CC) $(CFLAGS) -o encode.out encode.c encoding_functions.c -lm
 
 decode.out: decode.c
-	$(CC) $(CFLAGS) -o decode.out decode.c -lm
+	$(CC) $(CFLAGS) -o decode.out decode.c decoding_functions.c -lm
 
 clean:
-	rm -f encode.out decode.out
+	rm -f *.out *.o

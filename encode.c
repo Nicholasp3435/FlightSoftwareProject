@@ -92,9 +92,9 @@ void encode_image(unsigned int message_size, unsigned char* img, char* message, 
 }
 
 
-void add_meta(char* message, unsigned char meta_bytes) {
-    for (unsigned char i = 0; i < meta_bytes; i++) {
-        message[i] = '\0';
+void add_meta(char* message, unsigned char num_meta_bytes, char* meta_bytes) {
+    for (unsigned char i = 0; i < num_meta_bytes; i++) {
+        message[i] = meta_bytes[i];
     }
 }
 
@@ -158,9 +158,9 @@ int main(int argc, char * argv[]) {
     unsigned int message_size = ftell(fptr);
     fseek(fptr, 0L, SEEK_SET);
 
-    unsigned char meta_bytes = 5;
+    unsigned char num_meta_bytes = 5;
 
-    message_size = message_size + meta_bytes;
+    message_size = message_size + num_meta_bytes;
 
         // checks if message_size is too much for image encoding
     if (message_size > (total_pixels * compression_lvl)) {
@@ -174,9 +174,16 @@ int main(int argc, char * argv[]) {
 
     char message[message_size];
 
-    add_meta(message, meta_bytes);
+    char meta_bytes[num_meta_bytes];
+
+    printf("Adding meta bytes . . . \n");
+    // puts the size into meta
+    for (unsigned char i = 0; i < 4; i++) {
+        meta_bytes[i] = '\0';
+    }
+    add_meta(message, num_meta_bytes, meta_bytes);
     
-    fread((message + meta_bytes), 1, message_size - meta_bytes, fptr);
+    fread((message + num_meta_bytes), 1, message_size - num_meta_bytes, fptr);
 
     message[message_size - 1] = '\0';
 

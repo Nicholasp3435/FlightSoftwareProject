@@ -130,7 +130,7 @@ int main(int argc, char * argv[]) {
 
     unsigned char meta_bytes = 5;
 
-    message_size = message_size - meta_bytes;
+    message_size = message_size + meta_bytes;
 
         // checks if message_size is too much for image encoding
     if (message_size > (total_pixels * compression_lvl)) {
@@ -141,11 +141,11 @@ int main(int argc, char * argv[]) {
         message_size = total_pixels * compression_lvl;
     }
 
-    char message[message_size + meta_bytes];
+    char message[message_size];
 
     add_meta(message, meta_bytes);
     
-    fread((message + meta_bytes), 1, message_size, fptr);
+    fread((message + meta_bytes), 1, message_size - meta_bytes, fptr);
 
     message[message_size - 1] = '\0';
 
@@ -154,12 +154,12 @@ int main(int argc, char * argv[]) {
 
     printf("Encoding %d characters\n\n", message_size);
 
-    printf("Encoding characters into image . . .\n");
+    printf("Encoding characters into pixels . . .\n");
 
     encode_image(message_size, compression_lvl, img, message, true);
 
 
-    printf("Finished encoding %u characters into image!\n", message_size);
+    printf("Finished encoding %u characters into the picxels!\n", message_size);
     printf("writing to %s . . .\n", output_png_name);
 
     // debugging

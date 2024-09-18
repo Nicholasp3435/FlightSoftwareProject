@@ -9,7 +9,7 @@
 #include "include/stb_image.h"
 #include "include/stb_image_write.h"
 
-unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char compression_lvl, bool verbose) {
+unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
     if (verbose) {
         printf("encoding %c into #%x:\t", letter, pixel_bytes);
     }
@@ -17,9 +17,7 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char c
     unsigned int encoded_pixel = 0;
 
     unsigned int bit_mask = 0xFCFCFCFC;
-    if (compression_lvl == 2) {
-        bit_mask = 0xF0F0F0F0;
-    }
+    
     // bit masks for each channel
     pixel_bytes &= bit_mask;
 
@@ -41,7 +39,48 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char c
     return encoded_pixel;
 }
 
-void encode_image(unsigned int message_size, unsigned char compression_lvl, unsigned char* img, char* message, bool verbose) {
+
+unsigned int encode_pixel_2_byte(unsigned int pixel_bytes, char letter1, char letter2, bool verbose) {
+    if (verbose) {
+        printf("encoding %c and %c into #%x:\t", letter1, letter2, pixel_bytes);
+    }
+
+    unsigned int encoded_pixel = 0;
+
+    unsigned int bit_mask = 0xF0F0F0F0;
+    
+    // bit masks for each channel
+    pixel_bytes &= bit_mask;
+
+    unsigned char letter_mask = 0b11000000;
+    unsigned int split_letter1 = 0;
+
+    // splits the letter1 into 4
+    for (int i = 3; i >= 0; i--) {
+        unsigned int current_channel = letter_mask & letter1;
+        current_channel = current_channel << (6 * i);
+        split_letter1 |= current_channel;
+        letter_mask >>= 2;
+    }
+
+    letter_mask = 0b11000000;
+    unsigned int split_letter2 = 0;
+
+    for (int i = 3; i >= 0; i--) {
+        unsigned int current_channel = letter_mask & letter2;
+        current_channel = current_channel << (6 * i + 2);
+        split_letter2 |= current_channel;
+        letter_mask >>= 2;
+    }
+
+    encoded_pixel = pixel_bytes | (split_letter1 | split_letter2);
+    if (verbose) {
+        printf("#%x \n", encoded_pixel);
+    }
+    return encoded_pixel;
+}
+
+void encode_image(unsigned int message_size, unsigned char* img, char* message, bool verbose) {
     for (unsigned int i = 0; i < message_size; i++) {
         unsigned int pixel_bytes = 0;
 
@@ -52,11 +91,31 @@ void encode_image(unsigned int message_size, unsigned char compression_lvl, unsi
             pixel_bytes |= channel_byte;
         }    
 
-        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], compression_lvl, verbose);
+        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], verbose);
 
         // places the encoded pixel in the image
         for (char j = 0; j < 4; j++) {
             img[4 * i + j] = (encoded_pixel >> (3-j)*8);
+        }
+    }
+}
+
+void encode_image_2_byte(unsigned int message_size, unsigned char* img, char* message, bool verbose) {
+    for (unsigned int i = 0; i < message_size; i+=2) {
+        unsigned int pixel_bytes = 0;
+
+        // puts the channels of the pixels into an int for encoding
+        for (char j = 0; j < 4; j++) {
+            unsigned int channel_byte = img[2 * i + j];
+            channel_byte <<= (3 - j) * 8;
+            pixel_bytes |= channel_byte;
+        }    
+
+        unsigned int encoded_pixel = encode_pixel_2_byte(pixel_bytes, message[i], message[i + 1], verbose);
+
+        // places the encoded pixel in the image
+        for (char j = 0; j < 4; j++) {
+            img[2 * i + j] = (encoded_pixel >> (3-j)*8);
         }
     }
 }
@@ -156,14 +215,18 @@ int main(int argc, char * argv[]) {
 
     printf("Encoding characters into pixels . . .\n");
 
-    encode_image(message_size, compression_lvl, img, message, true);
+    if (compression_lvl == 1) {
+        encode_image(message_size, img, message, true);
+    } else {
+        encode_image_2_byte(message_size, img, message, true);
+    }
 
 
-    printf("Finished encoding %u characters into the picxels!\n", message_size);
+    printf("Finished encoding %u characters into the pixels!\n", message_size);
     printf("writing to %s . . .\n", output_png_name);
 
     // debugging
-    //print_image(img, total_sub_pixels);
+    print_image(img, total_sub_pixels);
 
 
     // Write the modified image back to a PNG file

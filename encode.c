@@ -9,53 +9,28 @@
 #include "include/stb_image.h"
 #include "include/stb_image_write.h"
 
-unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
+unsigned int encode_pixel(unsigned int pixel_bytes, char letter1, char letter2, int compression_level, bool verbose) {
     if (verbose) {
-        printf("encoding %c into #%x:\t", letter, pixel_bytes);
+        if (compression_level == 1) {
+            printf("Encoding %c into #%x:\t", letter1, pixel_bytes);
+        } else {
+            printf("Encoding %c and %c into #%x:\t", letter1, letter2, pixel_bytes);
+        }
     }
 
     unsigned int encoded_pixel = 0;
-
     unsigned int bit_mask = 0xFCFCFCFC;
-    
+    if (compression_level == 2) {
+        bit_mask = 0xF0F0F0F0;
+    }
+
     // bit masks for each channel
     pixel_bytes &= bit_mask;
 
-    unsigned char letter_mask = 0b11000000;
-    unsigned int split_letter = 0;
-
-    // splits the letter into 4
-    for (int i = 3; i >= 0; i--) {
-        unsigned int current_channel = letter_mask & letter;
-        current_channel = current_channel << (6 * i);
-        split_letter |= current_channel;
-        letter_mask >>= 2;
-    }
-
-    encoded_pixel = pixel_bytes | split_letter;
-    if (verbose) {
-        printf("#%x \n", encoded_pixel);
-    }
-    return encoded_pixel;
-}
-
-
-unsigned int encode_pixel_2_byte(unsigned int pixel_bytes, char letter1, char letter2, bool verbose) {
-    if (verbose) {
-        printf("encoding %c and %c into #%x:\t", letter1, letter2, pixel_bytes);
-    }
-
-    unsigned int encoded_pixel = 0;
-
-    unsigned int bit_mask = 0xF0F0F0F0;
-    
-    // bit masks for each channel
-    pixel_bytes &= bit_mask;
-
+    // encoding letter1
     unsigned char letter_mask = 0b11000000;
     unsigned int split_letter1 = 0;
 
-    // splits the letter1 into 4
     for (int i = 3; i >= 0; i--) {
         unsigned int current_channel = letter_mask & letter1;
         current_channel = current_channel << (6 * i);
@@ -63,62 +38,59 @@ unsigned int encode_pixel_2_byte(unsigned int pixel_bytes, char letter1, char le
         letter_mask >>= 2;
     }
 
-    letter_mask = 0b11000000;
-    unsigned int split_letter2 = 0;
+    if (compression_level == 2) {
+        // encoding for letter2 when compression_level is 2
+        letter_mask = 0b11000000;
+        unsigned int split_letter2 = 0;
 
-    for (int i = 3; i >= 0; i--) {
-        unsigned int current_channel = letter_mask & letter2;
-        current_channel = current_channel << (6 * i + 2);
-        split_letter2 |= current_channel;
-        letter_mask >>= 2;
+        for (int i = 3; i >= 0; i--) {
+            unsigned int current_channel = letter_mask & letter2;
+            current_channel = current_channel << (6 * i + 2);
+            split_letter2 |= current_channel;
+            letter_mask >>= 2;
+        }
+
+        encoded_pixel = pixel_bytes | (split_letter1 | split_letter2);
+    } else {
+        // if compression_level == 1, only encode letter1
+        encoded_pixel = pixel_bytes | split_letter1;
     }
 
-    encoded_pixel = pixel_bytes | (split_letter1 | split_letter2);
     if (verbose) {
-        printf("#%x \n", encoded_pixel);
+        printf("#%x\n", encoded_pixel);
     }
+
     return encoded_pixel;
 }
 
-void encode_image(unsigned int message_size, unsigned char* img, char* message, bool verbose) {
-    for (unsigned int i = 0; i < message_size; i++) {
+void encode_image(unsigned int message_size, unsigned char* img, char* message, int compression_level, bool verbose) {
+    for (unsigned int i = 0; i < message_size; i += compression_level) {
         unsigned int pixel_bytes = 0;
 
         // puts the channels of the pixels into an int for encoding
         for (char j = 0; j < 4; j++) {
-            unsigned int channel_byte = img[4 * i + j];
+            unsigned int pixel_index = (4 / compression_level) * i + j;
+            unsigned int channel_byte = img[pixel_index];
             channel_byte <<= (3 - j) * 8;
             pixel_bytes |= channel_byte;
-        }    
+        }
 
-        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], verbose);
+        // encode based on compression level
+        unsigned int encoded_pixel;
+        if (compression_level == 1) {
+            encoded_pixel = encode_pixel(pixel_bytes, message[i], 0, compression_level, verbose);
+        } else {
+            encoded_pixel = encode_pixel(pixel_bytes, message[i], message[i + 1], compression_level, verbose);
+        }
 
         // places the encoded pixel in the image
         for (char j = 0; j < 4; j++) {
-            img[4 * i + j] = (encoded_pixel >> (3-j)*8);
+            unsigned int pixel_index = (4 / compression_level) * i + j;
+            img[pixel_index] = (encoded_pixel >> (3 - j) * 8);
         }
     }
 }
 
-void encode_image_2_byte(unsigned int message_size, unsigned char* img, char* message, bool verbose) {
-    for (unsigned int i = 0; i < message_size; i+=2) {
-        unsigned int pixel_bytes = 0;
-
-        // puts the channels of the pixels into an int for encoding
-        for (char j = 0; j < 4; j++) {
-            unsigned int channel_byte = img[2 * i + j];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        }    
-
-        unsigned int encoded_pixel = encode_pixel_2_byte(pixel_bytes, message[i], message[i + 1], verbose);
-
-        // places the encoded pixel in the image
-        for (char j = 0; j < 4; j++) {
-            img[2 * i + j] = (encoded_pixel >> (3-j)*8);
-        }
-    }
-}
 
 void add_meta(char* message, unsigned char meta_bytes) {
     for (unsigned char i = 0; i < meta_bytes; i++) {
@@ -170,7 +142,6 @@ int main(int argc, char * argv[]) {
         return EXIT_FAILURE;
     }
     unsigned int total_pixels = width * height;
-    unsigned int total_sub_pixels = total_pixels * num_channels;
 
     printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, total_pixels);
     printf("\t(That means we can encode %d ascii characters in it!)\n\n", total_pixels * compression_lvl);
@@ -195,8 +166,9 @@ int main(int argc, char * argv[]) {
     if (message_size > (total_pixels * compression_lvl)) {
         printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
         if (compression_lvl == 1) {
-            printf("\t(Try using a higher compression level!).\n\n");
+            printf("\t(Try using a higher compression level!).\n");
         }
+        puts("");
         message_size = total_pixels * compression_lvl;
     }
 
@@ -211,22 +183,17 @@ int main(int argc, char * argv[]) {
     // Close the file
     fclose(fptr); 
 
-    printf("Encoding %d characters\n\n", message_size);
+    printf("Encoding %d characters into pixels . . .\n", message_size);
 
-    printf("Encoding characters into pixels . . .\n");
-
-    if (compression_lvl == 1) {
-        encode_image(message_size, img, message, true);
-    } else {
-        encode_image_2_byte(message_size, img, message, true);
-    }
+    // WOOOOOO ENCODINGGGG !!!!
+    encode_image(message_size, img, message, compression_lvl, true);
 
 
-    printf("Finished encoding %u characters into the pixels!\n", message_size);
+    printf("Finished encoding %u characters into the pixels!\n\n", message_size);
     printf("writing to %s . . .\n", output_png_name);
 
     // debugging
-    print_image(img, total_sub_pixels);
+    print_image(img, total_pixels * 4);
 
 
     // Write the modified image back to a PNG file

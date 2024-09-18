@@ -132,8 +132,12 @@ int main(int argc, char * argv[]) {
     }
 
     char message[message_size];
+
+    unsigned char meta_bytes = 5;
     
-    fread(message, 1, message_size, fptr);
+    fread((message + meta_bytes), 1, message_size, fptr);
+
+    message_size = meta_bytes + message_size;
 
     // Close the file
     fclose(fptr); 
@@ -145,7 +149,7 @@ int main(int argc, char * argv[]) {
 
     printf("Encoding characters into image . . .\n");
 
-    encode_image(message_size, compression_lvl, img, message, false);
+    encode_image(message_size, compression_lvl, img, message, true);
 
 
     printf("Finished encoding %u characters into image!\n", message_size);

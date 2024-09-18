@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 // Enable stb implementations
 #define STB_IMAGE_IMPLEMENTATION
@@ -8,8 +9,10 @@
 #include "include/stb_image.h"
 #include "include/stb_image_write.h"
 
-unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char compression_lvl) {
-    printf("encoding %c into %x\n", letter, pixel_bytes);
+unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char compression_lvl, bool verbose) {
+    if (verbose) {
+        printf("encoding %c into #%x:\t", letter, pixel_bytes);
+    }
 
     unsigned int encoded_pixel = 0;
 
@@ -32,8 +35,41 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, unsigned char c
     }
 
     encoded_pixel = pixel_bytes | split_letter;
-    printf("%x \n", encoded_pixel);
+    if (verbose) {
+        printf("#%x \n", encoded_pixel);
+    }
     return encoded_pixel;
+}
+
+void encode_image(unsigned int message_size, unsigned char compression_lvl, unsigned char* img, char* message, bool verbose) {
+    for (unsigned int i = 0; i < message_size; i++) {
+        unsigned int pixel_bytes = 0;
+
+        // puts the channels of the pixels into an int for encoding
+        for (char j = 0; j < 4; j++) {
+            unsigned int channel_byte = img[4 * i + j];
+            channel_byte <<= (3 - j) * 8;
+            pixel_bytes |= channel_byte;
+        }    
+
+        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], compression_lvl, verbose);
+
+        // places the encoded pixel in the image
+        for (char j = 0; j < 4; j++) {
+            img[4 * i + j] = (encoded_pixel >> (3-j)*8);
+        }
+    }
+}
+
+void print_image(unsigned char* img, unsigned int total_sub_pixels) {
+    printf("All image pixels (decimal):");
+    for (unsigned int i = 0; i < total_sub_pixels; i++) {
+        if (i%4==0) {
+            puts("");
+        }
+        printf("%hhu ", img[i]);
+    }
+    puts("");
 }
 
 int main(int argc, char * argv[]) {
@@ -72,10 +108,9 @@ int main(int argc, char * argv[]) {
     unsigned int total_sub_pixels = total_pixels * num_channels;
 
     printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, total_pixels);
-    
-    printf("(That means we can encode %d ascii characters in it!)\n\n", total_pixels * compression_lvl);
+    printf("\t(That means we can encode %d ascii characters in it!)\n\n", total_pixels * compression_lvl);
 
-    printf("Reading %s for message. . .\n", mesasage_txt_name);
+    printf("Reading %s for message . . .\n", mesasage_txt_name);
 
     FILE *fptr;
 
@@ -89,7 +124,10 @@ int main(int argc, char * argv[]) {
 
     // checks if message_size is too much for image encoding
     if (message_size > (total_pixels * compression_lvl)) {
-        printf("Warning: too big message or too smol image. Truncating message.\n");
+        printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
+        if (compression_lvl == 1) {
+            printf("\t(Try using a higher compression level!).\n\n");
+        }
         message_size = total_pixels * compression_lvl;
     }
 
@@ -100,43 +138,25 @@ int main(int argc, char * argv[]) {
     // Close the file
     fclose(fptr); 
 
-
-
     // terminates with null char    
     message[message_size - 1] = '\0';
 
     printf("Encoding %d characters\n\n", message_size);
 
-    printf("Encoding characters into image ...\n");
+    printf("Encoding characters into image . . .\n");
 
-    //TODO: make this not look terrible like i mean it works butttttt likeeee wtf
-    for (int i = 0; i < message_size; i++) {
-        unsigned int pixel_bytes = 0;
+    encode_image(message_size, compression_lvl, img, message, false);
 
-        // puts the channels of the pixels into an int for encoding
-        for (int j = 0; j < 4; j++) {
-            unsigned int channel_byte = img[4 * i + j];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        }    
 
-        unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], compression_lvl);
-
-        // places the encoded pixel in the image
-        for (int j = 0; j < 4; j++) {
-            img[4 * i + j] = (encoded_pixel >> (3-j)*8);
-        }
-    }
+    printf("Finished encoding %u characters into image!\n", message_size);
+    printf("writing to %s . . .\n", output_png_name);
 
     // debugging
-    for (int i = 0; i < total_sub_pixels; i++) {
-        if (i%4==0) {
-            puts("");
-        }
-        printf("%hhu ", img[i]);
-    }
+    //print_image(img, total_sub_pixels);
+
 
     // Write the modified image back to a PNG file
+    // it seems that this is what is causing any slowdown. perhaps find a quicker header to do this?
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
         printf("Error: Failed to save image\n");
         return 1;

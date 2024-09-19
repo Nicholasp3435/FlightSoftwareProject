@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 
-unsigned short hamming_12_8(char letter) {
+unsigned short steamed_hams(char letter) {
     unsigned short encoded = 0;
 
     unsigned short g1, g2, g3 = 0;
@@ -20,28 +20,25 @@ unsigned short hamming_12_8(char letter) {
     // puts the groups into the respective bits
     encoded = (g1 | g2 | g3);
 
-
     unsigned short p1, p2, p4, p8 = 0;
+
+    // hamming(12, 8) layout: p1 p2 d1 p4 d2 d3 d4 p8 d5 d6 d7 d8
 
     p1 = ((encoded >> 9) ^ (encoded >> 7) ^ (encoded >> 5) ^ (encoded >> 3) ^ (encoded >> 1)) & 1;
     p2 = ((encoded >> 9) ^ (encoded >> 6) ^ (encoded >> 5) ^ (encoded >> 2) ^ (encoded >> 1)) & 1;
-    p4 = ((encoded >> 7) ^ (encoded >> 6) ^ (encoded >> 5) ^ (encoded >> 0)) & 1;
-    p8 = ((encoded >> 3) ^ (encoded >> 2) ^ (encoded >> 1) ^ (encoded >> 0)) & 1;
+    p4 = ((encoded >> 7) ^ (encoded >> 6) ^ (encoded >> 5)) & 1;
+    p8 = ((encoded >> 3) ^ (encoded >> 2) ^ (encoded >> 1)) & 1;
 
     p1 <<= 11;
     p2 <<= 10;
     p4 <<= 8;
     p8 <<= 4;
 
+    // puts the parity bits into the respective bits
     encoded |= (p1 | p2 | p4 | p8);
-
-    printf("hammed: %hu \t", encoded);
 
     return encoded;
 }
-
-
-
 
 
 unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
@@ -49,14 +46,13 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
         printf("Encoding %c into #%x:\t", letter, pixel_bytes);
     }
 
-    unsigned int encoded_pixel = 0;
     unsigned int bit_mask = 0xF8F8F8F8;  // Clear the 3 LSBs for each channel (4 channels = 4 * 3 = 12 bits)
 
     // Apply bit mask to clear 3 LSBs of each channel
     pixel_bytes &= bit_mask;
 
     // Get the 12-bit Hamming encoded data for the letter
-    unsigned short hamming_code = hamming_12_8(letter);
+    unsigned short hamming_code = steamed_hams(letter);
 
     // Distribute the 12 bits into the 4 channels (3 bits per channel)
     for (int i = 3; i >= 0; i--) {

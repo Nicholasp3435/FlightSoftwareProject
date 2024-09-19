@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-// Enable stb implementations
+/* Enable stb implementations */
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
@@ -17,12 +17,12 @@
 /*
  * Function: print_image
  * ---------------------
- * Prints all the pixels of an image line by line
- * This expects 4 subpixels per pixel.
+ *   Prints all the pixels of an image line by line
+ *   This expects 4 subpixels per pixel.
  *
- * img: An array of subpixel bytes
- * total_pixels: The number of pixels to print
- * num_channels: The number of the channels per pixel
+ *   img: An array of subpixel bytes
+ *   total_pixels: The number of pixels to print
+ *   num_channels: The number of the channels per pixel
  */
 void print_image(unsigned char* img, unsigned int total_pixels, unsigned char num_channels) {
     printf("All image pixels (decimal):");
@@ -56,7 +56,7 @@ int main(int argc, char * argv[]) {
     
     unsigned char num_channels = 4; /* Used to always set there 4 subpixels per pixel */
     
-    // Load the PNG image and checks if it was successful. Exits if it didn't
+    /* Load the PNG image and checks if it was successful. Exits if it didn't */
     unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
     if (img == NULL) {
         printf("Error: Failed to load image\n");
@@ -75,16 +75,16 @@ int main(int argc, char * argv[]) {
 
     fptr = fopen(mesasage_txt_name, "r"); /* Opens a file into read mode */
 
-    // Gets the length of the file
+    /* Gets the length of the file */
     fseek(fptr, 0L, SEEK_END);
     unsigned int message_size = ftell(fptr);
     fseek(fptr, 0L, SEEK_SET);
 
-    // Sets the amout of bytes to allocate to the message for metadata
+    /* Sets the amout of bytes to allocate to the message for metadata */
     unsigned char num_meta_bytes = 4;
     message_size += num_meta_bytes;
 
-    // Checks if message_size is too much for image encoding. If so, truncate the message.
+    /* Checks if message_size is too much for image encoding. If so, truncate the message. */
     if (message_size > (total_pixels)) {
         printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
         message_size = total_pixels;
@@ -95,7 +95,7 @@ int main(int argc, char * argv[]) {
 
     printf("Adding meta bytes . . . \n");
 
-    // Puts the message_size into metadata (int = 4 chars)
+    /* Puts the message_size into metadata (int = 4 chars) */
     for (unsigned char i = 0; i < 4; i++) {
         meta_bytes[3 - i] = (message_size >> (i * 8));
     } // for
@@ -120,8 +120,8 @@ int main(int argc, char * argv[]) {
     //print_image(img, total_pixels, num_sub_pixels); /* Debugging */
 
 
-    /* Write the modified image back to a PNG file .
-     > It seems that this is what is causing any slowdown. Perhaps find a quicker header to do this? */
+    /* Write the modified image back to a PNG file.
+       It seems that this is what is causing any slowdown. Perhaps find a quicker header to do this? */
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
         printf("Error: Failed to save image\n");
         return 1;

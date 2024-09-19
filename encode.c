@@ -35,6 +35,27 @@ void print_image(unsigned char* img, unsigned int total_pixels, unsigned char nu
     puts("");
 } // print_image
 
+/*
+ * Function: main
+ * --------------
+ *   The main function encodesa message into a PNG image using Hamming(12,8) code for error correction.
+ *   It processes command line arguments for input, output, and message file paths, loads the image,
+ *   reads the message, and then encodes the messageinto the image pixels. Finally, the modified image
+ *   is saved as a new or overwrites a PNG file.
+ *
+ *   The steps of the program are as follows:
+ *     1. Parse command line arguments to get the input/output file names.
+ *     2. Load the input PNG image using stb_image.
+ *     3. Open and read the message from the specified text file.
+ *     4. Add metadata to the message (signature & message size).
+ *     5. Encode the message into the image pixels using Hamming code.
+ *     6. Save the modified image to a new PNG file.
+ *
+ *   argc: The number of command line arguments.
+ *   argv: An array of strings representing the command line arguments.
+ *
+ *   returns: EXIT_SUCCESS (0) if the encoding worked successfully; else, EXIT_FAILURE (1).
+ */
 int main(int argc, char * argv[]) {
     // Default files
     char* input_png_name = "image.png";
@@ -81,7 +102,7 @@ int main(int argc, char * argv[]) {
     fseek(fptr, 0L, SEEK_SET);
 
     /* Sets the amout of bytes to allocate to the message for metadata */
-    unsigned char num_meta_bytes = 4;
+    unsigned char num_meta_bytes = 7;
     message_size += num_meta_bytes;
 
     /* Checks if message_size is too much for image encoding. If so, truncate the message. */
@@ -95,9 +116,14 @@ int main(int argc, char * argv[]) {
 
     printf("Adding meta bytes . . . \n");
 
+    /* Puts a signature into the metadate so the decoder to know the image was or wasn't encoded */
+    meta_bytes[0] = 'N';
+    meta_bytes[1] = 'i';
+    meta_bytes[2] = 'c';
+
     /* Puts the message_size into metadata (int = 4 chars) */
     for (unsigned char i = 0; i < 4; i++) {
-        meta_bytes[3 - i] = (message_size >> (i * 8));
+        meta_bytes[(3 - i) + 3] = (message_size >> (i * 8));
     } // for
 
     add_meta(message, num_meta_bytes, meta_bytes);

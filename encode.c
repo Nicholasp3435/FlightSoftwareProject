@@ -15,27 +15,6 @@
 #include "encoding_functions.h"
 
 /*
- * Function: print_image
- * ---------------------
- *   Prints all the pixels of an image line by line
- *   This expects 4 subpixels per pixel.
- *
- *   img: An array of subpixel bytes
- *   total_pixels: The number of pixels to print
- *   num_channels: The number of the channels per pixel
- */
-void print_image(unsigned char* img, unsigned int total_pixels, unsigned char num_channels) {
-    printf("All image pixels (decimal):");
-    for (unsigned int i = 0; i < total_pixels * num_channels; i++) {
-        if (i % num_channels == 0) {
-            puts(""); /* Print new line every new pixel */
-        } // if
-        printf("%hhu ", img[i]);
-    } // for
-    puts("");
-} // print_image
-
-/*
  * Function: main
  * --------------
  *   The main function encodesa message into a PNG image using Hamming(12,8) code for error correction.
@@ -73,9 +52,11 @@ int main(int argc, char * argv[]) {
         } // if
     } // for
 
-    int width, height, channels; /* Initializes the width, height, and channels of the image for stbi_load */
+    /* Initializes the width, height, and channels of the image for stbi_load */
+    int width, height, channels; 
     
-    unsigned char num_channels = 4; /* Used to always set there 4 subpixels per pixel */
+    /* Used to always set there 4 subpixels per pixel */
+    unsigned char num_channels = 4; 
     
     /* Load the PNG image and checks if it was successful. Exits if it didn't */
     unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
@@ -86,7 +67,9 @@ int main(int argc, char * argv[]) {
 
     unsigned int total_pixels = width * height;
 
-    printf("Loaded %s with width %d and height %d; %d pixels total\n", input_png_name, width, height, total_pixels);
+    printf("Loaded %s with width %d and height %d; %d pixels total\n", 
+        input_png_name, width, height, total_pixels);
+
     printf("\t(That means we can encode %d ascii characters in it!)\n\n", total_pixels);
 
     printf("Reading %s for message . . .\n", mesasage_txt_name);
@@ -94,7 +77,8 @@ int main(int argc, char * argv[]) {
     /* File reading adapted from: https://www.w3schools.com/c/c_files_read.php */
     FILE *fptr;
 
-    fptr = fopen(mesasage_txt_name, "r"); /* Opens a file into read mode */
+    /* Opens a file into read mode */
+    fptr = fopen(mesasage_txt_name, "r"); 
 
     /* Gets the length of the file */
     fseek(fptr, 0L, SEEK_END);
@@ -123,7 +107,7 @@ int main(int argc, char * argv[]) {
 
     /* Puts the message_size into metadata (int = 4 chars) */
     for (unsigned char i = 0; i < 4; i++) {
-        meta_bytes[(3 - i) + 3] = (message_size >> (i * 8));
+        meta_bytes[(3 - i) + 3] = ((message_size) >> (i * 8));
     } // for
 
     add_meta(message, num_meta_bytes, meta_bytes);
@@ -132,9 +116,10 @@ int main(int argc, char * argv[]) {
        and puts the data offset by the metadata into message */
     fread((message + num_meta_bytes), 1, message_size - num_meta_bytes, fptr); 
 
-    message[message_size - 1] = '\0'; /* Terminate message with \0 */
+    message[message_size - 1] = '\0'; 
 
-    fclose(fptr); /* Close file */
+    /* Close file */
+    fclose(fptr); 
 
     printf("Encoding %d characters into pixels . . .\n", message_size);
 
@@ -143,9 +128,6 @@ int main(int argc, char * argv[]) {
     printf("Finished encoding %u characters into the pixels!\n\n", message_size);
     printf("Writing to %s . . .\n", output_png_name);
 
-    //print_image(img, total_pixels, num_sub_pixels); /* Debugging */
-
-
     /* Write the modified image back to a PNG file.
        It seems that this is what is causing any slowdown. Perhaps find a quicker header to do this? */
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
@@ -153,7 +135,8 @@ int main(int argc, char * argv[]) {
         return 1;
     } // if
 
-    stbi_image_free(img); /* Free the image from memory */
+    /* Free the image from memory */
+    stbi_image_free(img); 
 
     printf("Image processing complete\n");
     return EXIT_SUCCESS;

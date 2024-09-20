@@ -10,9 +10,9 @@ unsigned short steamed_hams(char letter) {
     unsigned short g1, g2, g3 = 0;
 
     /* Splits letter into groups */
-    g1 = letter & 0b10000000;
-    g2 = letter & 0b01110000;
-    g3 = letter & 0b00001111;
+    g1 = letter & 0x80;
+    g2 = letter & 0x70;
+    g3 = letter & 0xF;
 
     g1 <<= 2;
     g2 <<= 1;
@@ -30,8 +30,8 @@ unsigned short steamed_hams(char letter) {
 
     p1 = ((encoded >> 9) ^ (encoded >> 7) ^ (encoded >> 5) ^ (encoded >> 3) ^ (encoded >> 1)) & 1;
     p2 = ((encoded >> 9) ^ (encoded >> 6) ^ (encoded >> 5) ^ (encoded >> 2) ^ (encoded >> 1)) & 1;
-    p4 = ((encoded >> 7) ^ (encoded >> 6) ^ (encoded >> 5)) & 1;
-    p8 = ((encoded >> 3) ^ (encoded >> 2) ^ (encoded >> 1)) & 1;
+    p4 = ((encoded >> 7) ^ (encoded >> 6) ^ (encoded >> 5) ^ (encoded)) & 1;
+    p8 = ((encoded >> 3) ^ (encoded >> 2) ^ (encoded >> 1) ^ (encoded)) & 1;
 
     p1 <<= 11;
     p2 <<= 10;
@@ -57,8 +57,7 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
     /* Get the 12-bit Hamming encoded data for the letter */
     unsigned short hamming_code = steamed_hams(letter);
 
-    /* Spread the 12 bits into the 4 channels (3 bits per channel) 
-       Needs to be unsigned because it counts down and includes 0 (all unsigned 0 - 1 = 255 and will loop forever) */
+    /* Spread the 12 bits into the 4 channels (3 bits per channel) */
     for (char i = 3; i >= 0; i--) {
         unsigned int channel_bits = (hamming_code >> (i * 3)) & 0x7;  /* Extract 3 bits for each channel */
         pixel_bytes |= (channel_bits << (i * 8));  /* Insert into the 3 LSBs of each channel */

@@ -74,56 +74,23 @@ int main(int argc, char * argv[]) {
 
     printf("Reading %s for message . . .\n", mesasage_txt_name);
 
-    /* File reading adapted from: https://www.w3schools.com/c/c_files_read.php */
-    FILE *fptr;
 
-    /* Opens a file into read mode */
-    fptr = fopen(mesasage_txt_name, "r"); 
+    unsigned int message_size = 0;
+    unsigned int* message_size_ptr = &message_size;
 
-    /* Gets the length of the file */
-    fseek(fptr, 0L, SEEK_END);
-    unsigned int message_size = ftell(fptr);
-    fseek(fptr, 0L, SEEK_SET);
+    char* message = read_message_from_file(mesasage_txt_name, total_pixels, 7, message_size_ptr); 
+    if (message == NULL) {
+        return EXIT_FAILURE;
+    }
 
-    /* Sets the amout of bytes to allocate to the message for metadata */
-    unsigned char num_meta_bytes = 7;
-    message_size += num_meta_bytes;
-
-    /* Checks if message_size is too much for image encoding. If so, truncate the message. */
-    if (message_size > (total_pixels)) {
-        printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
-        message_size = total_pixels;
-    } // if
-
-    char message[message_size];
-    char meta_bytes[num_meta_bytes];
-
-    printf("Adding meta bytes . . . \n");
-
-    /* Puts a signature into the metadate so the decoder to know the image was or wasn't encoded */
-    meta_bytes[0] = 'N';
-    meta_bytes[1] = 'i';
-    meta_bytes[2] = 'c';
-
-    /* Puts the message_size into metadata (int = 4 chars) */
-    for (unsigned char i = 0; i < 4; i++) {
-        meta_bytes[(3 - i) + 3] = ((message_size) >> (i * 8));
-    } // for
-
-    add_meta(message, num_meta_bytes, meta_bytes);
-    
-    /* Reads the file 1 byte at a time up to the message_size without the metadata
-       and puts the data offset by the metadata into message */
-    fread((message + num_meta_bytes), 1, message_size - num_meta_bytes, fptr); 
-
-    message[message_size - 1] = '\0'; 
-
-    /* Close file */
-    fclose(fptr); 
+    message_size = *message_size_ptr;
 
     printf("Encoding %d characters into pixels . . .\n", message_size);
 
     encode_image(message_size, img, message, false); /* WOOO encoding finally! */
+
+    free(message);
+    
 
     printf("Finished encoding %u characters into the pixels!\n\n", message_size);
     printf("Writing to %s . . .\n", output_png_name);
@@ -137,6 +104,7 @@ int main(int argc, char * argv[]) {
 
     /* Free the image from memory */
     stbi_image_free(img); 
+
 
     printf("Image processing complete\n");
     return EXIT_SUCCESS;

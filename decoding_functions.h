@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-/*
+/**
  * Function: hamming_decode
  * ------------------------
  *   Checks a Hamming(12, 8) code to make sure that the data is intact.
@@ -15,7 +15,7 @@
  */
 unsigned char hamming_decode(unsigned short hamming_code);
 
-/*
+/**
  * Function: decode_pixel
  * ----------------------
  *   Decodes the the letter out of a pixel. Pixels are expected to have 4 channels: R, G, B, and A.
@@ -29,7 +29,7 @@ unsigned char hamming_decode(unsigned short hamming_code);
  */
 unsigned char decode_pixel(unsigned int pixel_pytes, bool verbose);
 
-/*
+/**
  * Function: decode_image
  * ----------------------
  *   Decodes all of the pixels of an image. This uses the decode_pixel function.

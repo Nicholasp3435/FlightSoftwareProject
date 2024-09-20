@@ -94,8 +94,78 @@ void encode_image(unsigned int message_size, unsigned char* img, char* message, 
     } // for
 } // encode_image
 
-void add_meta(char* message, unsigned char num_meta_bytes, char* meta_bytes) {
-    for (unsigned char i = 0; i < num_meta_bytes; i++) {
+char* read_message_from_file(const char* mesasage_txt_name, unsigned int total_pixels,
+                             unsigned char meta_size, unsigned int* message_size_ptr) {
+
+    /* File reading adapted from: https://www.w3schools.com/c/c_files_read.php */
+    FILE *fptr;
+    unsigned int message_size;
+    
+    /* Opens a file into read mode */
+    fptr = fopen(mesasage_txt_name, "r");
+    if (fptr == NULL) {
+        printf("Error: Failed to open message file %s\n", mesasage_txt_name);
+        fclose(fptr);
+        return NULL;
+    } // if
+
+    /* Gets the length of the file */
+    fseek(fptr, 0L, SEEK_END);
+    message_size = ftell(fptr);
+    fseek(fptr, 0L, SEEK_SET);
+
+    message_size += meta_size;
+
+    /* Checks if message_size is too much for image encoding. If so, truncate the message. */
+    if (message_size > total_pixels) {
+        printf("\tWarning: message is too big to be encoded into this image; truncating message.\n");
+        message_size = total_pixels;
+    } // if
+
+    /* Allocates memory for the message (using calloc to initialize memory to 0) */
+    char* message = (char*) calloc(message_size, 1);
+    if (message == NULL) {
+        printf("Error: Memory allocation failed\n");
+        fclose(fptr);
+        return NULL;
+    } // if
+
+    /* Add metadata to the message */
+    char meta_bytes[meta_size];
+    printf("Adding meta bytes . . . \n");
+
+    add_meta(meta_bytes, message, meta_size, message_size);
+
+    /* Reads the file 1 byte at a time up to the message_size without the metadata
+       and puts the data offset by the metadata into message */
+    fread(message + meta_size, 1, message_size - meta_size, fptr);
+
+    /* Close file */
+    fclose(fptr);
+
+    /* Null-terminate the message */
+    message[message_size - 1] = '\0';
+
+    *message_size_ptr = message_size;
+
+    /* Return a pointer to the allocated memory */
+    return message;
+} // read_message_from_file
+
+
+void add_meta(char* meta_bytes, char* message, unsigned char meta_size, unsigned int message_size) {
+    /* Puts a signature into the metadate so the decoder to know the image was or wasn't encoded */
+    meta_bytes[0] = 'N';
+    meta_bytes[1] = 'i';
+    meta_bytes[2] = 'c';
+
+    /* Puts the message_size into metadata (int = 4 chars) */
+    for (unsigned char i = 0; i < 4; i++) {
+        meta_bytes[(3 - i) + 3] = ((message_size) >> (i * 8));
+
+    } // for
+
+    for (unsigned char i = 0; i < meta_size; i++) {
         message[i] = meta_bytes[i];
     } // for
 } // add_meta

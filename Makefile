@@ -3,13 +3,23 @@ CFLAGS = -Wall -pedantic
 
 all: encode.out decode.out
 
-# hey btw future me: -lm means Link Math (L M!) and the stb libs needs it
+encode.out: encode.o encoding_functions.o
+	$(CC) $(CFLAGS) -o encode.out encode.o encoding_functions.o -lm
 
-encode.out: encode.c encoding_functions.o
-	$(CC) $(CFLAGS) -o encode.out encode.c encoding_functions.c -lm
+decode.out: decode.o decoding_functions.o
+	$(CC) $(CFLAGS) -o decode.out decode.o decoding_functions.o -lm
 
-decode.out: decode.c decoding_functions.o
-	$(CC) $(CFLAGS) -o decode.out decode.c decoding_functions.c -lm
+encoding_functions.o: encoding_functions.c
+	$(CC) $(CFLAGS) -c encoding_functions.c
+
+decoding_functions.o: decoding_functions.c
+	$(CC) $(CFLAGS) -c decoding_functions.c
+
+encode.o: encode.c
+	$(CC) $(CFLAGS) -c encode.c
+
+decode.o: decode.c
+	$(CC) $(CFLAGS) -c decode.c
 
 clean:
 	rm -f *.out *.o

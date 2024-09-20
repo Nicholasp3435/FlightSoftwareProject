@@ -56,15 +56,34 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose);
 void encode_image(unsigned int message_size, unsigned char* img, char* message, bool verbose);
 
 /*
+ * Function read_message_from_file
+ * -------------------------------
+ *   Reads a message from a file. It will make sure that the message size isn't too much for the
+ *   image to handle. The message will contain metadata for the length of the message and a signature
+ *   of "Nic". The lack of one indicates that the image doesn't have anything encoded.
+ * 
+ *   mesasage_txt_name: The name of the message_txt file to read
+ *   total_pixels: The total nuber of pixels of the image.
+ *      Used to check if all the message will or won't fit.
+ *   meta_size: The number of bytes to allocate for the metadata
+ *   message_size: A pointer to place the final size of the message in
+ * 
+ *   returns: a char* of the message out of the file
+ */
+char* read_message_from_file(const char* mesasage_txt_name, unsigned int total_pixels,
+                             unsigned char meta_size, unsigned int* message_size);
+
+/*
  * Function: add_meta
  * ------------------
  *   Adds the metadata to the begnning of the message. Use this before reading the 
  *   message file to prepend with the metadata.
  *   
+ *   meta_bytes: The array of metadata to copy to the message
  *   message: The array to put the metadata in
- *   num_meta_bytes: The number of metadata bytes
- *   meta_byts: The array of metadata to copy to the message
+ *   meta_size: The number of metadata bytes
+ *   message_size: The size of the message to put as meta
  */
-void add_meta(char* message, unsigned char num_meta_bytes, char* meta_bytes);
+void add_meta(char* meta_bytes, char* message, unsigned char meta_size, unsigned int message_size);
 
 #endif

@@ -64,6 +64,9 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
     char* signature = "Nic";
 
+
+    printf("Checking metadata . . .\n");
+
     /* Checks the signature to see if it is a valid encoded image */
     for (unsigned char i = 0; i < 3; i++) {
         unsigned int pixel_bytes = 0;
@@ -103,11 +106,15 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
         message_size |= (byte << ((3 - i) * 8));
     }
 
-    printf("Found %u letters encoded\n", message_size);
+    printf("Found %u letters encoded . . .\n", message_size);
 
     unsigned int num_meta_bytes = 7;
 
     for (unsigned int i = num_meta_bytes; i < message_size; i++) {
+        /* Fancy dynamic display adapted from: https://stackoverflow.com/q/20947161 */
+        printf("\rDecoded %u of %u letters . . .", i + 1, message_size);
+        fflush(stdout);
+
         unsigned int pixel_bytes = 0;
 
         /* Extract the 4-channel pixel and pack it into an int */
@@ -122,6 +129,8 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
         fprintf(fptr, "%c", letter);
     }
+
+    puts("");
 
 
     return true;

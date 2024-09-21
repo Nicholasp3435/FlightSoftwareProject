@@ -74,7 +74,6 @@ int main(int argc, char * argv[]) {
 
     printf("Reading %s for message . . .\n", mesasage_txt_name);
 
-
     unsigned int message_size = 0;
     unsigned int* message_size_ptr = &message_size;
 
@@ -106,6 +105,6 @@ int main(int argc, char * argv[]) {
     stbi_image_free(img); 
 
 
-    printf("Image processing complete\n");
+    printf("Finished encoding pixels! Wrote image to %s\n", output_png_name);
     return EXIT_SUCCESS;
 } // main

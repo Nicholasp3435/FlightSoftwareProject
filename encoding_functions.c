@@ -73,6 +73,10 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose) {
 
 void encode_image(unsigned int message_size, unsigned char* img, char* message, bool verbose) {
     for (unsigned int i = 0; i < message_size; i++) {
+        /* Fancy dynamic display adapted from: https://stackoverflow.com/q/20947161 */
+        printf("\rEncoded %u of %u letters . . .", i + 1, message_size);
+        fflush(stdout);
+
         unsigned int pixel_bytes = 0;
 
         /* Extract the 4-channel pixel and pack it into an int */
@@ -92,6 +96,8 @@ void encode_image(unsigned int message_size, unsigned char* img, char* message, 
             img[pixel_index] = (encoded_pixel >> (3 - j) * 8);
         } // for
     } // for
+    puts("");
+
 } // encode_image
 
 char* read_message_from_file(const char* mesasage_txt_name, unsigned int total_pixels,

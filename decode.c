@@ -40,7 +40,7 @@ int main(int argc, char * argv[]) {
 
     unsigned int total_pixels = width * height;
 
-    printf("Loaded %s with width %d and height %d; %d pixels total\n", 
+    printf("Loaded %s with width %d and height %d; %d pixels total\n\n", 
         input_png_name, width, height, total_pixels);
 
 
@@ -51,9 +51,12 @@ int main(int argc, char * argv[]) {
 
     printf("Decoding image . . .\n");
     bool success = decode_image(img, fptr, false);
+    printf("Finished decoding pixels! Wrote message to %s\n", output_txt_name);
 
     // Close the file
     fclose(fptr); 
+
+    stbi_image_free(img); 
 
     if (!success) {
         return EXIT_FAILURE;

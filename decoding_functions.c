@@ -4,6 +4,7 @@
 
 
 unsigned char hamming_decode(unsigned short hamming_code) {  
+    /* Count all the parity bits */
     unsigned char p1 = ((hamming_code >> 11) ^ (hamming_code >> 9) ^ (hamming_code >> 7) ^
                         (hamming_code >> 5)  ^ (hamming_code >> 3) ^ (hamming_code >> 1)) & 1;
 
@@ -22,6 +23,7 @@ unsigned char hamming_decode(unsigned short hamming_code) {
 
     unsigned char error_location = (p1 | p2 | p4 | p8);
 
+    /* error_location != 0, flip the bit at that position */
     if (error_location != 0)  {
         unsigned short bit_mask = 0x1000;
         bit_mask >>= error_location;
@@ -62,8 +64,7 @@ unsigned char decode_pixel(unsigned int pixel_bytes, bool verbose) {
 
 bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
-    char* signature = "Nic";
-
+    const char* signature = "Nic";
 
     printf("Checking metadata . . .\n");
 
@@ -95,7 +96,7 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
         /* Extract the 4-channel pixel and pack it into an int */
         for (unsigned char j = 0; j < 4; j++) {
-            unsigned int pixel_index = 4 * i + j + (3 * 4);
+            unsigned int pixel_index = 4 * i + j + (3 * 4); /* offset by 3 pixels with 4 channels each */
             unsigned int channel_byte = img[pixel_index];
             channel_byte <<= (3 - j) * 8;
             pixel_bytes |= channel_byte;
@@ -132,7 +133,5 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
     puts("");
 
-
     return true;
-
 }

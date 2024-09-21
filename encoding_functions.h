@@ -12,7 +12,7 @@
  * 
  *   data: The byte to encode with a Hamming code. 
  *   
- *   returns: A short with it's 12 LSBs populated by data and parity bits as follors: 
+ *   returns: A short with it's 12 LSBs populated by data and parity bits as follows: 
  *      [0 0 0 0 P1 P2 D1 P4 D2 D3 D4 P8 D5 D6 D7 D8]
  */
 unsigned short steamed_hams(char data);
@@ -31,15 +31,15 @@ unsigned short steamed_hams(char data);
  *      A is an alpha bit
  *      D is a data bit
  *      
- *      RRRRRRRR | GGGGGGGG | BBBBBBBB | AAAAAAAA -> RRRRRDDD | GGGGGDDD | BBBBBDDD | AAAAADDD
+ *      RRRRRRRR | GGGGGGGG | BBBBBBBB | AAAAAAAA -> encode_pixel -> RRRRRDDD | GGGGGDDD | BBBBBDDD | AAAAADDD
  *   
  *   The resulting pixel is similar enough to the original as to hide the data without too much suspicion.
  * 
- *   pixel_bytes: The bytes of the pixel condensed into an int
+ *   pixel_bytes: The color data of a pixel, i.e. it's hex value
  *   letter: The letter to store inside the bit
- *   verbose: If true, the function will print the hexadecimal color code after the encoding
+ *   verbose: If true, the function will print the hex value after the encoding
  * 
- *   returns: A 32-bit integer with the encoded data
+ *   returns: A 32-bit integer with the encoded data, i.e. it's hex value with the letter encoded
  */
 unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose);
 
@@ -51,7 +51,7 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose);
  *   message_size: The amount of characters to put into the image
  *   img: An array (provided by stb) of all the subpixels of an image
  *   message: The message to put into the image
- *   verbose: If true, the function will print the hexadecimal color code after the encoding
+ *   verbose: If true, the function will print the hex value after the encoding
  */
 void encode_image(unsigned int message_size, unsigned char* img, char* message, bool verbose);
 

@@ -1,5 +1,5 @@
-#ifndef ENCODING_FUNCTIONS_H
-#define ENCODING_FUNCTIONS_H
+#ifndef DECODING_FUNCTIONS_H
+#define DECODING_FUNCTIONS_H
 
 #include <stdbool.h>
 
@@ -22,7 +22,7 @@ unsigned char hamming_decode(unsigned short hamming_code);
  *   This automatically decodes the Hamming code from the data of the pixel. It will take the last
  *   3 bits of each channel and put them all together, decode the Hamming code, and return the letter.
  * 
- *   pixel_bytes: 32-bit integer with each byte for each of the channels in the order RGBA
+ *   pixel_bytes: The color data of a pixel, i.e. it's hex value
  *   verbose: If true, the function will print the letter after decoding
  * 
  *   returns: a char of the letter encoded in the pixel

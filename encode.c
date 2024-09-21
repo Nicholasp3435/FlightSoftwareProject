@@ -33,7 +33,7 @@
  *   argc: The number of command line arguments.
  *   argv: An array of strings representing the command line arguments.
  *
- *   returns: EXIT_SUCCESS (0) if the encoding worked successfully; else, EXIT_FAILURE (1).
+ *   returns: EXIT_SUCCESS if the encoding worked successfully; else, EXIT_FAILURE.
  */
 int main(int argc, char * argv[]) {
     // Default files
@@ -56,7 +56,7 @@ int main(int argc, char * argv[]) {
     int width, height, channels; 
     
     /* Used to always set there 4 subpixels per pixel */
-    unsigned char num_channels = 4; 
+    const unsigned char num_channels = 4; 
     
     /* Load the PNG image and checks if it was successful. Exits if it didn't */
     unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);

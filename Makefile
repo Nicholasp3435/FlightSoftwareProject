@@ -21,5 +21,15 @@ encode.o: encode.c
 decode.o: decode.c
 	$(CC) $(CFLAGS) -c decode.c
 
+test: test.out
+	./test.out
+
+test.out: test.o encoding_functions.o decoding_functions.o
+	$(CC) $(CFLAGS) -o test.out test.o encoding_functions.o decoding_functions.o -lm
+
+test.o: test.c
+	$(CC) $(CFLAGS) -c test.c
+
+
 clean:
 	rm -f *.out *.o

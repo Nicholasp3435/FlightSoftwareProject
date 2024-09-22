@@ -6,7 +6,7 @@ Description
 
 For this project, I was tasked to encode an ASCII message into a PNG image without (noticeably) visually
 altering the image. I decided to implement a very rudimentary Least Significant Bit (LSB) steganography 
-algorithm. To reduce errors, the message is encoded with Hamming(12, 8) codes that can not just detect
+algorithm. To reduce errors, the message is encoded with Hamming(12, 8) codes that can not only detect
 errors in transmission, but can correct them.
 
 How it works
@@ -21,7 +21,7 @@ How it works
 5. Split the encoded letter's bits into 4 groups of 3 and overwrite the 3 LSB of each of the subpixels with it.
 6. Write each of these encoded pixels to the output image file with stb.
 
-Observe the following for an example of encoding the letter 'B' into a pixel of the value #9C4E97FF:
+See the example below for encoding the letter 'B' into a pixel of the value #9C4E97FF:
 
 - Image pixel value is #9C4E97FF so with the `char*` it is stored as `[0x9C, 0x4E, 0x97, 0xFF]`.
 - 'B' = `0b01000010`.
@@ -40,7 +40,7 @@ Observe the following for an example of encoding the letter 'B' into a pixel of 
 1. Read the input image file with stb and store each subpixel value with a `char*`.
 2. Take the 3 LSBs of the first 3 pixels' subchannels and Hamming(12, 8) decode them to the original bytes
    - Then check if this is the signature, "Nic"; continue decoding if so
-3. Take the 3 LSBs of the next 4 pixels's subchannels to get the length of the message.
+3. Take the 3 LSBs of the next 4 pixels' subchannels to get the length of the message.
 4. Continue decoding up to the length of the message and writing each letter to the output message file.
 
 Design Decisions
@@ -73,10 +73,44 @@ I looked it on Google and found two common PNG libraries: [libpng](http://www.li
 and [stb](https://github.com/nothings/stb). I chose stb because, frankly, it looked a lot more simple
 to setup and use compared to libpng. 
 
-Platform
---------
-This was written, compiled, and tested on Linux Mint 21.3 x86_64. It was also tested and ran on UGA's Odin servers.  
+Platform and Usage
+------------------
+
+This was written, compiled, and tested on Linux Mint 21.3 x86_64 using GCC 11.4.0. It was also tested,
+compiled, and ran on UGA's Odin servers. A Makefile can be run with the following commands:
+
+| Command      | Purpose                                                                    |
+| ------------ | -------------------------------------------------------------------------- |
+| `make`       | Compiles encode.c and decode.c into encode.out and decode.out respectivly. |
+| `make test`  | Compiles and runs test.c for unit testing.                                 |
+| `make clean` | Removes all *.out and *.o files.                                           |
+
+### To Encode
+
+After running the `make` command, there will be an executable file called `encode.out`. The following
+command can be run to encode a message into an image
+
+`./encode.out [-i input_image] [-o output_image] [-m message]`
+
+| File         | Default     |
+| ------------ | ----------- |
+| input_image  | image.png   |
+| output_image | output.png  |
+| message      | message.txt |
+
 Here is a sample input file with the entire script of Dreamworks' *Bee Movie* encoded in it:  
 <img src="README_assets/image.png" width="400">
 <img src="README_assets/output.png" width="400">  
 The image on the left is before encoding and on the right is after encoding.
+
+### To Decode
+
+After running the `make` command, there will be an executable file called `decode.out`. The following
+command can be run to decode a message from an image
+
+`./decode.out [-i input_image.png] [-o output_message.txt]`
+
+| File        | Default            |
+| ----------- | ------------------ |
+| input_image | output.png         |
+| message     | message_output.txt |

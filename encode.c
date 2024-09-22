@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
     if (total_pixels < 8) {
         printf("Error: Image too small to encode any letters. Minimum number of pixels is 9\n");
         return EXIT_FAILURE;
-    }
+    } // if
 
     printf("Loaded %s with width %d and height %d; %d pixels total\n", 
         input_png_name, width, height, total_pixels);
@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
     char* message = read_message_from_file(mesasage_txt_name, total_pixels, 7, message_size_ptr); 
     if (message == NULL) {
         return EXIT_FAILURE;
-    }
+    } // if
 
     message_size = *message_size_ptr;
 

@@ -81,7 +81,7 @@ compiled, and ran on UGA's Odin servers. A Makefile can be run with the followin
 
 | Command      | Purpose                                                                    |
 | ------------ | -------------------------------------------------------------------------- |
-| `make`       | Compiles encode.c and decode.c into encode.out and decode.out respectivly. |
+| `make`       | Compiles encode.c and decode.c into encode.out and decode.out respectively |
 | `make test`  | Compiles and runs test.c for unit testing.                                 |
 | `make clean` | Removes all *.out and *.o files.                                           |
 
@@ -108,7 +108,7 @@ The image on the left is before encoding and on the right is after encoding.
 After running the `make` command, there will be an executable file called `decode.out`. The following
 command can be run to decode a message from an image
 
-`./decode.out [-i input_image.png] [-o output_message.txt]`
+`./decode.out [-i input_image] [-o output_message]`
 
 | File        | Default            |
 | ----------- | ------------------ |

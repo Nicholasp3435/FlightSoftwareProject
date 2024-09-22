@@ -1,8 +1,9 @@
-#include "encoding_functions.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 
+#include "encoding_functions.h"
+#include "common_functions.h"
 
 unsigned short steamed_hams(char letter) {
     unsigned short encoded = 0;
@@ -77,15 +78,7 @@ void encode_image(unsigned int message_size, unsigned char* img, char* message, 
         printf("\rEncoded %u of %u letters . . .", i + 1, message_size);
         fflush(stdout);
 
-        unsigned int pixel_bytes = 0;
-
-        /* Extract the 4-channel pixel and pack it into an int */
-        for (unsigned char j = 0; j < 4; j++) {
-            unsigned int pixel_index = 4 * i + j;
-            unsigned int channel_byte = img[pixel_index];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        } // for
+        unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 
         /* Encode the character into the pixel using Hamming(12,8) */
         unsigned int encoded_pixel = encode_pixel(pixel_bytes, message[i], verbose);

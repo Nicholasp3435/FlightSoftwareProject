@@ -46,7 +46,7 @@ unsigned int encode_pixel(unsigned int pixel_bytes, char letter, bool verbose);
 /*
  * Function: encode_image
  * ----------------------
- *   Encodes all the pixels of an image. This uses the encode_pixel function.
+ *   Encodes all the pixels of an image. It loops through all the pixels using the encode_pixel function.
  * 
  *   message_size: The amount of characters to put into the image
  *   img: An array (provided by stb) of all the subpixels of an image

@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
 
-/* Enable stb implementations */
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-
-/** https://github.com/nothings/stb/blob/master/stb_image.h */
 #include "include/stb_image.h"
-/** https://github.com/nothings/stb/blob/master/stb_image_write.h */
 #include "include/stb_image_write.h"
 
 #include "encoding_functions.h"
@@ -20,15 +15,7 @@
  *   The main function encodesa message into a PNG image using Hamming(12,8) code for error correction.
  *   It processes command line arguments for input, output, and message file paths, loads the image,
  *   reads the message, and then encodes the messageinto the image pixels. Finally, the modified image
- *   is saved as a new or overwrites a PNG file.
- *
- *   The steps of the program are as follows:
- *     1. Parse command line arguments to get the input/output file names.
- *     2. Load the input PNG image using stb_image.
- *     3. Open and read the message from the specified text file.
- *     4. Add metadata to the message (signature & message size).
- *     5. Encode the message into the image pixels using Hamming code.
- *     6. Save the modified image to a new PNG file.
+ *   is saved as a new or overwrites a specified file.
  *
  *   argc: The number of command line arguments.
  *   argv: An array of strings representing the command line arguments.
@@ -67,6 +54,11 @@ int main(int argc, char * argv[]) {
 
     unsigned int total_pixels = width * height;
 
+    if (total_pixels < 8) {
+        printf("Error: Image too small to encode any letters. Minimum number of pixels is 9\n");
+        return EXIT_FAILURE;
+    }
+
     printf("Loaded %s with width %d and height %d; %d pixels total\n", 
         input_png_name, width, height, total_pixels);
 
@@ -86,24 +78,21 @@ int main(int argc, char * argv[]) {
 
     printf("Encoding %d characters into pixels . . .\n", message_size);
 
-    encode_image(message_size, img, message, false); /* WOOO encoding finally! */
+    encode_image(message_size, img, message, false);
 
     free(message);
-    
 
     printf("Finished encoding %u characters into the pixels!\n\n", message_size);
     printf("Writing to %s . . .\n", output_png_name);
 
-    /* Write the modified image back to a PNG file.
-       It seems that this is what is causing any slowdown. Perhaps find a quicker header to do this? */
+    /* Write the modified image back to a PNG file. */
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
         printf("Error: Failed to save image\n");
-        return 1;
+        return EXIT_FAILURE;
     } // if
 
     /* Free the image from memory */
     stbi_image_free(img); 
-
 
     printf("Finished encoding pixels! Wrote image to %s\n", output_png_name);
     return EXIT_SUCCESS;

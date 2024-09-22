@@ -2,9 +2,11 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "decoding_functions.h"
+#include "common_functions.h"
 
 unsigned char hamming_decode(unsigned short hamming_code) {  
-    /* Count all the parity bits */
+    /* Counts the parity bits of the Hamming code */
     unsigned char p1 = ((hamming_code >> 11) ^ (hamming_code >> 9) ^ (hamming_code >> 7) ^
                         (hamming_code >> 5)  ^ (hamming_code >> 3) ^ (hamming_code >> 1)) & 1;
 
@@ -23,7 +25,7 @@ unsigned char hamming_decode(unsigned short hamming_code) {
 
     unsigned char error_location = (p1 | p2 | p4 | p8);
 
-    /* error_location != 0, flip the bit at that position */
+    /* if error_location != 0, flip the bit at that position */
     if (error_location != 0)  {
         unsigned short bit_mask = 0x1000;
         bit_mask >>= error_location;
@@ -48,6 +50,7 @@ unsigned char decode_pixel(unsigned int pixel_bytes, bool verbose) {
 
     unsigned short hamming_code = 0;
 
+    /* Extracts the letter data from the pixel */
     for (char i = 3; i >= 0; i--) {
         unsigned int channel_bits = (pixel_bytes >> (i * 8)) & 0x7; /* Extracts 3 bits for each channel*/
         hamming_code |= (channel_bits << (i * 3)); /* Inserts into the hamming code */
@@ -64,74 +67,54 @@ unsigned char decode_pixel(unsigned int pixel_bytes, bool verbose) {
 
 bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
+    /* "Nic" is encoded into every first 3 pixels of each image by encode.c */
     const char* signature = "Nic";
 
     printf("Checking metadata . . .\n");
 
-    /* Checks the signature to see if it is a valid encoded image */
+    /* Checks the signature */
     for (unsigned char i = 0; i < 3; i++) {
-        unsigned int pixel_bytes = 0;
 
-        /* Extract the 4-channel pixel and pack it into an int */
-        for (unsigned char j = 0; j < 4; j++) {
-            unsigned int pixel_index = 4 * i + j;
-            unsigned int channel_byte = img[pixel_index];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        } // for
+        unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 
         unsigned char letter = decode_pixel(pixel_bytes, verbose);
 
         if (letter != signature[i]) {
             printf("Error: Image doesn't seem to be encoded.\n");
             return false;
-        }
-    }
+        } // if
+    } // for
 
     unsigned int message_size = 0;
 
-    /* Gets the length of the message */
-    for (unsigned char i = 0; i < 4; i++) {
-        unsigned int pixel_bytes = 0;
+    /* Gets the length of the message. The length is encoded in pixels [3, 7] */
+    for (unsigned char i = 3; i < 7; i++) {
 
-        /* Extract the 4-channel pixel and pack it into an int */
-        for (unsigned char j = 0; j < 4; j++) {
-            unsigned int pixel_index = 4 * i + j + (3 * 4); /* offset by 3 pixels with 4 channels each */
-            unsigned int channel_byte = img[pixel_index];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        } // for
+        unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 
         unsigned int byte = decode_pixel(pixel_bytes, verbose);
 
-        message_size |= (byte << ((3 - i) * 8));
-    }
+        message_size |= (byte << ((6 - i) * 8));
+    } // for
 
     printf("Found %u letters encoded . . .\n", message_size);
 
     unsigned int num_meta_bytes = 7;
 
+    /* Decodes the rest of the pixels and writes the message to the file */
     for (unsigned int i = num_meta_bytes; i < message_size; i++) {
         /* Fancy dynamic display adapted from: https://stackoverflow.com/q/20947161 */
         printf("\rDecoded %u of %u letters . . .", i + 1, message_size);
         fflush(stdout);
 
-        unsigned int pixel_bytes = 0;
-
-        /* Extract the 4-channel pixel and pack it into an int */
-        for (unsigned char j = 0; j < 4; j++) {
-            unsigned int pixel_index = 4 * i + j;
-            unsigned int channel_byte = img[pixel_index];
-            channel_byte <<= (3 - j) * 8;
-            pixel_bytes |= channel_byte;
-        } // for
+        unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 
         unsigned char letter = decode_pixel(pixel_bytes, verbose);
 
         fprintf(fptr, "%c", letter);
-    }
+    } // for
 
     puts("");
 
     return true;
-}
+} // decode_image

@@ -30,8 +30,7 @@ Observe the following for an example of encoding the letter 'B' into a pixel of 
 - Write each group of 3 into the pixels R, B, G, and A channels.
   
   ![Pixel before encoding](/README_assets/pixel_before.png)
-  ![Pixel after encoding](/README_assets/pixel_after.png) 
-
+  ![Pixel after encoding](/README_assets/pixel_after.png)  
   The image on the left is before encoding and on the right is after encoding.
 
 - Then write this to the output image file.
@@ -40,7 +39,7 @@ Observe the following for an example of encoding the letter 'B' into a pixel of 
 
 1. Read the input image file with stb and store each subpixel value with a `char*`.
 2. Take the 3 LSBs of the first 3 pixels' subchannels and Hamming(12, 8) decode them to the original bytes
-   - Check if this is then the signature, "Nic"; continue decoding if so
+   - Then check if this is the signature, "Nic"; continue decoding if so
 3. Take the 3 LSBs of the next 4 pixels's subchannels to get the length of the message.
 4. Continue decoding up to the length of the message and writing each letter to the output message file.
 
@@ -52,9 +51,9 @@ Right at beginning of the project, I did some research about hiding text inside 
 research, I found this general process is called steganography. I then read 
 [this article](https://en.wikipedia.org/wiki/List_of_steganography_techniques) of common steganography
 techniques, I found LSB to be a pretty simple. The example in it used 2 LSBs of each color channel. 
-I had originally used 2 as well (8 bits / 4 channels), however, later I decided to add Hamming(12, 8)
-codes so I had to use 3 LSBs per channel. This decreased the similarity of the input and output images, 
-however, I don't think it is too noticeable when viewed at a distance.
+I had originally used 2 as well because I had wanted to use 1 pixel per 1 letter, however, later I decided
+to add Hamming(12, 8) codes so I had to use 3 LSBs per channel. This decreased the similarity of the 
+input and output images, however, I don't think it is too noticeable when viewed at a distance. 
 
 ### Why Hamming(12, 8)?
 
@@ -76,4 +75,8 @@ to setup and use compared to libpng.
 
 Platform
 --------
-This was written, compiled, and tested on Linux Mint 21.3 x86_64. It was also tested and ran on UGA's Odin servers.
+This was written, compiled, and tested on Linux Mint 21.3 x86_64. It was also tested and ran on UGA's Odin servers.  
+Here is a sample input file with the entire script of Dreamworks' *Bee Movie* encoded in it:  
+<img src="README_assets/image.png" width="400">
+<img src="README_assets/output.png" width="400">  
+The image on the left is before encoding and on the right is after encoding.

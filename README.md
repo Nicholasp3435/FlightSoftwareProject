@@ -90,7 +90,7 @@ compiled, and ran on UGA's Odin servers. A Makefile can be run with the followin
 ### To Encode
 
 After running the `make` command, there will be an executable file called `encode.out`. The following
-command can be run to encode a message into an image
+command can be run to encode a message into an image and write it to a new image
 
 ```
 ./encode.out [-i input_image] [-o output_image] [-m message]
@@ -107,10 +107,13 @@ Here is a sample input file with the entire script of Dreamworks' *Bee Movie* en
 <img src="README_assets/output.png" width="400">  
 The image on the left is before encoding and on the right is after encoding.
 
+`encode.out` will also make sure that the input file has enough pixels to encode the message. If it 
+doesn't, it will truncate the message to fit. 
+
 ### To Decode
 
 After running the `make` command, there will be an executable file called `decode.out`. The following
-command can be run to decode a message from an image
+command can be run to decode a message from an image and write to it to a file
 
 ```
 ./decode.out [-i input_image] [-o output_message]

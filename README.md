@@ -79,18 +79,22 @@ Platform and Usage
 This was written, compiled, and tested on Linux Mint 21.3 x86_64 using GCC 11.4.0. It was also tested,
 compiled, and ran on UGA's Odin servers. A Makefile can be run with the following commands:
 
-| Command      | Purpose                                                                    |
-| ------------ | -------------------------------------------------------------------------- |
-| `make`       | Compiles encode.c and decode.c into encode.out and decode.out respectively |
-| `make test`  | Compiles and runs test.c for unit testing.                                 |
-| `make clean` | Removes all *.out and *.o files.                                           |
+| Command            | Purpose                                                                    |
+| ------------------ | -------------------------------------------------------------------------- |
+| `make`             | Compiles encode.c and decode.c into encode.out and decode.out respectively |
+| `make encode.out`  | Compiles encode.c into encode.out.                                         |
+| `make decode.out`  | Compiles decode.c into decode.out.                                         |
+| `make test`        | Compiles and runs test.c for unit testing.                                 |
+| `make clean`       | Removes all *.out and *.o files.                                           |
 
 ### To Encode
 
 After running the `make` command, there will be an executable file called `encode.out`. The following
 command can be run to encode a message into an image
 
-`./encode.out [-i input_image] [-o output_image] [-m message]`
+```
+./encode.out [-i input_image] [-o output_image] [-m message]
+```
 
 | File         | Default     |
 | ------------ | ----------- |
@@ -108,7 +112,9 @@ The image on the left is before encoding and on the right is after encoding.
 After running the `make` command, there will be an executable file called `decode.out`. The following
 command can be run to decode a message from an image
 
-`./decode.out [-i input_image] [-o output_message]`
+```
+./decode.out [-i input_image] [-o output_message]
+```
 
 | File        | Default            |
 | ----------- | ------------------ |

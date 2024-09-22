@@ -23,12 +23,12 @@
  *   returns: EXIT_SUCCESS if the encoding worked successfully; else, EXIT_FAILURE.
  */
 int main(int argc, char * argv[]) {
-    // Default files
+    /* Default files */
     char* input_png_name = "image.png";
     char* output_png_name = "output.png";
     char* mesasage_txt_name = "message.txt";
 
-    // Parses the command line args
+    /* Parses the command line args */
     for (unsigned char i = 1; i < argc; i++) {
         if (strcmp(argv[i], "-i") == 0) {
             input_png_name = argv[i + 1];

@@ -12,7 +12,7 @@
 /*
  * Function: main
  * --------------
- *   The main function encodesa message into a PNG image using Hamming(12,8) code for error correction.
+ *   The main function encodes a message into a PNG image using Hamming(12,8) code for error correction.
  *   It processes command line arguments for input, output, and message file paths, loads the image,
  *   reads the message, and then encodes the messageinto the image pixels. Finally, the modified image
  *   is saved as a new or overwrites a specified file.

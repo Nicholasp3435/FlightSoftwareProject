@@ -123,3 +123,15 @@ command can be run to decode a message from an image and write to it to a file
 | ----------- | ------------------ |
 | input_image | output.png         |
 | message     | message_output.txt |
+
+Rooms for improvement
+---------------------
+
+As with every project, there is always room for improvement.
+- One thing that I noticed was that writing a new image file with STB isn't super fast. Perhaps libpng
+  could've been faster.
+- Another could be compress the message before encoding it into the image. This would increase how much
+  data can be encoded into the image. 
+- Finally, a better error correction algorithm may decrease the redundancy in the data. Hamming(12, 8)
+  codes are 33% redundant. Another is that Hamming codes can only correct single bit errors. A better
+  error correction algorithm may allow decreased redundancy with more error correction.

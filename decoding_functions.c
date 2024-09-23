@@ -103,9 +103,6 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
 
     /* Decodes the rest of the pixels and writes the message to the file */
     for (unsigned int i = num_meta_bytes; i < message_size; i++) {
-        /* Fancy dynamic display adapted from: https://stackoverflow.com/q/20947161 */
-        printf("\rDecoded %u of %u letters . . .", i + 1, message_size);
-        fflush(stdout);
 
         unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 

@@ -102,13 +102,20 @@ command can be run to encode a message into an image and write it to a new image
 | output_image | output.png  |
 | message      | message.txt |
 
-Here is a sample input file with the entire script of Dreamworks' *Bee Movie* encoded in it:  
+Here is a sample file with the entire script of Dreamworks' *Bee Movie* encoded in it:  
 <img src="README_assets/image.png" width="400">
 <img src="README_assets/output.png" width="400">  
-The image on the left is before encoding and on the right is after encoding.
+
+And here is another sample file of an image of me at the Panola Mountain Banding Station with the complete
+works of William Shakespeare encoded in it:   
+<img src="README_assets/Nicholas.png" width="400">
+<img src="README_assets/Nicholas_output.png" width="400">
+
+For each example, the image on the left is before encoding and on the right is after encoding.
 
 `encode.out` will also make sure that the input file has enough pixels to encode the message. If it 
-doesn't, it will truncate the message to fit. 
+doesn't, it will truncate the message to fit. The pixel to message length is 1:1, meaning that for each
+letter in the message, it uses 1 pixel. 
 
 ### To Decode
 
@@ -128,8 +135,8 @@ Rooms for improvement
 ---------------------
 
 As with every project, there is always room for improvement.
-- One thing that I noticed was that writing a new image file with STB isn't super fast. Perhaps libpng
-  could've been faster.
+- One thing that I noticed was that writing a new image file with stb isn't super fast with large files.
+  Testing with with the `time` command, writing to a 5000x5000 image took about 6 seconds on my machine. Perhaps libpng could've been faster.
 - Another could be compress the message before encoding it into the image. This would increase how much
   data can be encoded into the image. 
 - Finally, a better error correction algorithm may decrease the redundancy in the data. Hamming(12, 8)

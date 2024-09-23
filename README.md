@@ -122,6 +122,9 @@ other filetypes! It will always output a PNG, but I accidentally inputted a JPG 
 flawlessly! Not only that, but the message isn't limited to text, it can encode any data into an image!
 I've even been able to encode images inside themselves without issues.
 
+Here is a sample file of an image encoded within itself by running `./encode.out -m image.png`  
+<img src="README_assets/self_contained.png" width="400">
+
 ### To Decode
 
 After running the `make` command, there will be an executable file called `decode.out`. The following

@@ -101,7 +101,6 @@ char* read_message_from_file(const char* mesasage_txt_name, unsigned int total_p
     fptr = fopen(mesasage_txt_name, "r");
     if (fptr == NULL) {
         printf("Error: Failed to open message file %s\n", mesasage_txt_name);
-        fclose(fptr);
         return NULL;
     } // if
 

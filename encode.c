@@ -49,6 +49,7 @@ int main(int argc, char * argv[]) {
     unsigned char *img = stbi_load(input_png_name, &width, &height, &channels, num_channels);
     if (img == NULL) {
         printf("Error: Failed to load image\n");
+        stbi_image_free(img); 
         return EXIT_FAILURE;
     } // if
 
@@ -71,6 +72,8 @@ int main(int argc, char * argv[]) {
 
     char* message = read_message_from_file(mesasage_txt_name, total_pixels, 7, message_size_ptr); 
     if (message == NULL) {
+        free(message);
+        stbi_image_free(img); 
         return EXIT_FAILURE;
     } // if
 
@@ -88,6 +91,7 @@ int main(int argc, char * argv[]) {
     /* Write the modified image back to a PNG file. */
     if (!stbi_write_png(output_png_name, width, height, num_channels, img, width * num_channels)) {
         printf("Error: Failed to save image\n");
+        stbi_image_free(img); 
         return EXIT_FAILURE;
     } // if
 

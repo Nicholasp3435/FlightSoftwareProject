@@ -117,6 +117,11 @@ For each example, the image on the left is before encoding and on the right is a
 doesn't, it will truncate the message to fit. The pixel to message length is 1:1, meaning that for each
 letter in the message, it uses 1 pixel. 
 
+A small sidenote I accidentally found out right on the last day of this project, it's possible to encode
+other filetypes! It will always output a PNG, but I accidentally inputted a JPG to encode and it worked
+flawlessly! Not only that, but the message isn't limited to text, it can encode any data into an image!
+I've even been able to encode images inside themselves without issues.
+
 ### To Decode
 
 After running the `make` command, there will be an executable file called `decode.out`. The following

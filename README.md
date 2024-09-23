@@ -102,6 +102,14 @@ command can be run to encode a message into an image and write it to a new image
 | output_image | output.png  |
 | message      | message.txt |
 
+Example commands:
+- `./encode.out` Will encode the contents of message.txt into image.png and will make a new file called
+  output.png .
+- `./encode.out -i flowers.png` Will encode the contents of message.txt into flowers.png and will make
+  a new file called output.png.
+- `./encode.out -m t8.shakespeare.tx -o shakespeare.png` will encode the contents of t8.shakespeare.txt
+  into image.png and will make a new file called shakespere.png.
+
 Here is a sample file with the entire script of Dreamworks' *Bee Movie* encoded in it:  
 <img src="README_assets/image.png" width="400">
 <img src="README_assets/output.png" width="400">  
@@ -138,6 +146,12 @@ command can be run to decode a message from an image and write to it to a file
 | ----------- | ------------------ |
 | input_image | output.png         |
 | message     | message_output.txt |
+
+Example commands:
+- `decode.out` will decode the message in output.png into message_output.txt.
+- `./decode.out -i flowers.png` will decode the message in flowers.png into message_output.txt.
+- `./encode.out -m shakespeare_works.txt -i shakespeare.png` will decode the message in shakespeare.png 
+  into shakespeare_works.txt.
 
 Rooms for improvement
 ---------------------

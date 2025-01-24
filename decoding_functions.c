@@ -102,7 +102,7 @@ bool decode_image(unsigned char* img, FILE* fptr, bool verbose) {
     unsigned int num_meta_bytes = 7;
 
     /* Decodes the rest of the pixels and writes the message to the file */
-    for (unsigned int i = num_meta_bytes; i < message_size - 1; i++) {
+    for (unsigned int i = num_meta_bytes; i < message_size; i++) {
 
         unsigned int pixel_bytes = extract_pixel_bytes(i, img);
 
